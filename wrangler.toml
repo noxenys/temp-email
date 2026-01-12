@@ -1,5 +1,5 @@
 name = "temp-email"
-main = "src/server.js"
+main = "worker.js"
 compatibility_date = "2026-01-11"
 
 # 兼容性标志 - 启用 Node.js 兼容性（用于某些 npm 包）

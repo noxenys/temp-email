@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "基于 Cloudflare Workers 的临时邮箱服务",
   "type": "module",
-  "main": "src/server.js",
+  "main": "worker.js",
   "scripts": {
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",
