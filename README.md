@@ -1,4 +1,4 @@
-﻿# Temp-Email 临时邮箱服务（基于 Cloudflare Workers）
+﻿﻿# Temp-Email 临时邮箱服务（基于 Cloudflare Workers）
 
 > 本项目基于 [idinging/freemail](https://github.com/idinging/freemail) 项目的代码进行修改和定制化开发
 
@@ -12,6 +12,14 @@
 一个基于 Cloudflare Workers 和 D1 数据库的临时邮箱服务，支持多域名、用户管理、邮件发送等高级功能。
 
 ## 一键部署
+
+### 方案一：Cloudflare 一键部署（推荐）
+
+[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/your-username/temp-email)
+
+点击上方按钮，使用 Cloudflare 官方的一键部署功能，无需本地环境配置。
+
+### 方案二：GitHub Actions 自动部署
 
 ### [一键部署指南](docs/yijianbushu.md)
 
@@ -188,11 +196,25 @@
 
 ## 🚀 一键部署指南
 
-本项目提供两种一键部署方案，让您快速将临时邮箱服务部署到 Cloudflare Workers。
+本项目提供三种一键部署方案，让您快速将临时邮箱服务部署到 Cloudflare Workers。
 
-### 方案一：GitHub Actions 自动部署（推荐）
+### 方案一：Cloudflare 一键部署（推荐）
 
-此方案利用 GitHub Actions 实现自动化部署，无需本地环境配置。
+此方案使用 Cloudflare 官方的一键部署功能，无需本地环境配置，最简单快捷。
+
+**部署步骤**:
+
+1. **点击部署按钮**：点击 README 顶部的 "Deploy to Cloudflare Workers" 按钮
+2. **授权连接**：授权 Cloudflare 访问您的 GitHub 仓库
+3. **配置环境变量**：在部署界面设置以下必需的环境变量：
+   - `MAIL_DOMAIN`：您的邮箱域名
+   - `ADMIN_PASSWORD`：管理员密码
+   - `JWT_TOKEN`：API 认证令牌
+4. **开始部署**：点击部署按钮，系统将自动创建所有必要资源
+
+### 方案二：GitHub Actions 自动部署
+
+此方案利用 GitHub Actions 实现自动化部署。
 
 **部署步骤**:
 
@@ -204,7 +226,7 @@
    - **自动触发**：推送代码到 `main` 分支时自动部署
    - **手动触发**：在 GitHub Actions 页面手动运行部署工作流
 
-### 方案二：本地一键部署
+### 方案三：本地一键部署
 
 如果您希望在本地环境部署，可以使用以下命令：
 

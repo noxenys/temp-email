@@ -1,0 +1,57 @@
+# Cloudflare Workers 一键部署配置
+# 此文件用于 Cloudflare 的 "Deploy with Workers" 功能
+# 用户可以通过 GitHub 模板直接部署此应用
+
+name: Temp Email Service
+type: worker
+framework: none
+
+# 部署配置
+config:
+  # 部署时自动创建的资源
+  resources:
+    - type: d1
+      name: temp_email_db
+      binding: TEMP_MAIL_DB
+    - type: r2
+      name: temp-mail-eml
+      binding: MAIL_EML
+
+# 环境变量配置（用户部署时需要设置）
+env_vars:
+  - name: MAIL_DOMAIN
+    description: "您的邮箱域名（多个域名用逗号分隔）"
+    required: true
+    type: secret
+  - name: ADMIN_PASSWORD
+    description: "管理员密码"
+    required: true
+    type: secret
+  - name: JWT_TOKEN
+    description: "API 认证令牌"
+    required: true
+    type: secret
+  - name: ADMIN_USERNAME
+    description: "管理员用户名（默认：admin）"
+    required: false
+    type: secret
+    default: "admin"
+
+# 部署后需要用户手动配置的步骤
+post_deploy:
+  - title: "配置邮件路由"
+    description: "在 Cloudflare 控制台配置邮件路由以接收邮件"
+    steps:
+      - "前往您的域名 > Email > Email Routing"
+      - "在 Routes 选项卡下，点击 Add catch-all"
+      - "在 Action 中选择 Send to a Worker"
+      - "在 Worker 下拉菜单中，选择您刚刚部署的 Worker"
+      - "点击 Save"
+
+# 项目信息
+metadata:
+  title: "临时邮箱服务"
+  description: "基于 Cloudflare Workers 和 D1 数据库的临时邮箱服务，支持多域名、用户管理、邮件发送等高级功能"
+  author: "Temp Email Project"
+  repository: "https://github.com/your-username/temp-email"
+  version: "v5.0"
