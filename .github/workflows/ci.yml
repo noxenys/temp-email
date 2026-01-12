@@ -35,6 +35,8 @@ jobs:
     
     - name: Upload coverage reports
       uses: codecov/codecov-action@v3
+      if: success()
+      continue-on-error: true
       with:
         file: ./coverage/lcov.info
         flags: unittests
@@ -92,6 +94,7 @@ jobs:
 
   deploy-manual:
     runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
