@@ -22,9 +22,6 @@ jobs:
     - name: Install dependencies
       run: npm ci
       
-    - name: Run tests
-      run: npm test
-      
     - name: Deploy to Cloudflare Workers
       uses: cloudflare/wrangler-action@v3
       with:

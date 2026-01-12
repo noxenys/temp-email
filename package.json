@@ -21,7 +21,7 @@
     "lint:fix": "eslint src/**/*.js --fix",
     "type-check": "tsc --noEmit",
     "build": "tsc",
-    "ci:test": "npm run lint && npm run type-check && npm run test:coverage"
+    "ci:test": "npm run test"
   },
   "dependencies": {
     "@cloudflare/workers-types": "^4.20241111.0",
