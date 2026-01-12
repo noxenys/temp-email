@@ -1,4 +1,4 @@
-﻿# Temp-Email 临时邮箱服务（基于 Cloudflare Workers）
+﻿﻿# Temp-Email 临时邮箱服务（基于 Cloudflare Workers）
 
 > 本项目基于 [idinging/freemail](https://github.com/idinging/freemail) 项目的代码进行修改和定制化开发
 
@@ -60,8 +60,8 @@
 ### 体验地址： `https://tempmail.noxen.de5.net`
 
 ### 体验账号： 
-- 用户名：admin
-- 密码：123456
+- 访客用户名：guest
+- 访客密码：123456
 
 更多展示详见：[展示文档](docs/zhanshi.md)
 
