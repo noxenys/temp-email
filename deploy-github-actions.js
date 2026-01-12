@@ -53,16 +53,9 @@ try {
   // 2. 创建 D1 数据库（如果不存在）
   console.log('🗄️ 检查并创建 D1 数据库...');
   try {
-    execSync(`npx wrangler d1 create ${DATABASE_NAME} --remote`, { stdio: 'inherit' });
-    console.log('✅ D1 数据库创建成功');
-    
-    // 获取新创建的数据库ID并更新配置
-    const databaseId = await getDatabaseId();
-    if (databaseId) {
-      await updateWranglerConfig(databaseId);
-    }
-  } catch (error) {
-    if (error.message.includes('already exists')) {
+    // 先检查数据库是否已存在
+    const dbList = execSync(`npx wrangler d1 list --remote`, { encoding: 'utf8' });
+    if (dbList.includes(DATABASE_NAME)) {
       console.log('ℹ️ D1 数据库已存在，跳过创建');
       
       // 获取现有数据库ID并确保配置正确
@@ -71,7 +64,21 @@ try {
         await updateWranglerConfig(databaseId);
       }
     } else {
-      console.warn('⚠️ D1 数据库创建失败，但继续部署:', error.message);
+      execSync(`npx wrangler d1 create ${DATABASE_NAME} --remote`, { stdio: 'inherit' });
+      console.log('✅ D1 数据库创建成功');
+      
+      // 获取新创建的数据库ID并更新配置
+      const databaseId = await getDatabaseId();
+      if (databaseId) {
+        await updateWranglerConfig(databaseId);
+      }
+    }
+  } catch (error) {
+    console.warn('⚠️ 检查或创建数据库时出错，但继续部署:', error.message);
+    // 即使出错也要尝试获取现有数据库ID
+    const databaseId = await getDatabaseId();
+    if (databaseId) {
+      await updateWranglerConfig(databaseId);
     }
   }
   
