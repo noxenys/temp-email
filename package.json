@@ -14,14 +14,10 @@
     "d1:execute-basic:remote": "wrangler d1 execute temp_mail_db --remote --file=d1-init-basic.sql",
     "d1:query:local": "wrangler d1 execute temp_mail_db --local",
     "d1:query:remote": "wrangler d1 execute temp_mail_db --remote",
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage",
     "lint": "eslint src/**/*.js",
     "lint:fix": "eslint src/**/*.js --fix",
     "type-check": "tsc --noEmit",
-    "build": "tsc",
-    "ci:test": "npm run test"
+    "build": "node build.js"
   },
   "dependencies": {
     "@cloudflare/workers-types": "^4.20241111.0",

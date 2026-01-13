@@ -21,7 +21,7 @@ compatibility_flags = ["nodejs_compat"]
 # D1 数据库绑定（部署时自动创建）
 [[d1_databases]]
 binding = "TEMP_MAIL_DB"
-name = "temp_email_db"
+database_name = "temp_email_db"
 # database_id 将在部署时动态更新
 database_id = ""
 

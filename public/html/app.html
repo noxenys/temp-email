@@ -5,7 +5,7 @@
   </div>
   <div id="role-badge" class="role-badge" title="欢迎用户："></div>
   <div class="nav-actions">
-    <a id="repo" class="btn btn-ghost" href="https://github.com/idinging/freemail" target="_blank" rel="noopener noreferrer" title="GitHub 开源仓库">
+    <a id="repo" class="btn btn-ghost" href="https://github.com/noxenys/temp-email" target="_blank" rel="noopener noreferrer" title="GitHub 开源仓库">
       <span class="btn-icon">🔗</span>
       <span class="btn-text">GitHub</span>
     </a>
@@ -67,6 +67,7 @@
                 <span class="section-icon">📧</span>
                 <span class="section-title">当前邮箱</span>
               </div>
+              <div class="usage-steps">① 生成邮箱 → ② 复制邮箱 → ③ 等待邮件</div>
               <div id="email" class="email-display">
                 <span id="email-text" class="email-text"><span class="placeholder-text">点击右侧生成按钮创建邮箱地址</span></span>
                 <div id="custom-overlay" class="custom-overlay" style="display:none">
@@ -86,7 +87,7 @@
               </button>
               <button id="clear" class="btn btn-danger" style="width:100%">
                 <span class="btn-icon">🗑️</span>
-                <span>清空邮件 💥</span>
+                <span>清空邮件</span>
               </button>
               <button id="refresh" class="btn btn-ghost" style="width:100%">
                 <span class="btn-icon">🔄</span>
@@ -127,11 +128,11 @@
               </div>
                <div class="generate-action">
                  <div class="generate-buttons" style="display: flex; gap: 8px; margin-bottom: 8px; width: 100%;">
-                   <button id="gen" class="btn btn-generate" style="flex: 1;">
+                   <button id="gen" class="btn btn-primary" style="flex: 1;">
                      <span class="btn-icon">🎲</span>
                      <span>随机生成</span>
                    </button>
-                   <button id="gen-name" class="btn btn-primary" style="flex: 1;" title="使用随机人名生成邮箱">
+                   <button id="gen-name" class="btn btn-secondary" style="flex: 1;" title="使用随机人名生成邮箱">
                      <span class="btn-icon">👤</span>
                      <span>随机人名</span>
                    </button>

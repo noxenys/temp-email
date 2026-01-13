@@ -36,7 +36,38 @@
 
 ![创建 API Key 3](../pic/resend/createapikey3.png)
 
-## 3. 在 Cloudflare Workers 配置变量
+## 3. 多域名配置详解
+
+本项目支持为多个域名配置不同的Resend API密钥，实现智能发送。支持以下三种配置格式：
+
+### 3.1 单密钥格式（向后兼容）
+适用于只使用一个域名的情况：
+```
+RESEND_API_KEY="re_xxxxxxxxxxxxxxxxxxxxxxxx"
+```
+
+### 3.2 键值对格式（推荐）
+适用于多个域名，格式为 `域名=API密钥`，多个键值对用逗号分隔：
+```
+RESEND_API_KEY="domain1.com=re_key1,domain2.com=re_key2"
+```
+
+### 3.3 JSON格式
+适用于复杂配置，使用标准JSON格式：
+```
+RESEND_API_KEY='{"domain1.com":"re_key1","domain2.com":"re_key2"}'
+```
+
+### 3.4 配置工作原理
+
+系统在发送邮件时会执行以下步骤：
+
+1. **提取发件人域名**：从发件人邮箱地址（如 `user@domain1.com`）中提取域名部分（`domain1.com`）
+2. **查找对应密钥**：在配置中查找与该域名匹配的API密钥
+3. **智能选择密钥**：使用匹配的API密钥调用Resend API发送邮件
+4. **批量优化**：批量发送时，系统会自动按域名分组，并行处理以提升效率
+
+## 4. 在 Cloudflare Workers 配置变量
 
 本项目运行在 Cloudflare Workers，需把密钥配置为 Secret，域名配置为普通变量。
 
@@ -57,7 +88,7 @@ wrangler secret put RESEND_API_KEY
 - 在 Secrets 添加 `RESEND_API_KEY`。
 - 在 Variables 添加 `MAIL_DOMAIN`，值为你用于收取/发件的域名列表（需与 Resend 已验证域名一致）。
 
-## 4. 关联项目并部署
+## 5. 关联项目并部署
 
 ```bash
 # 本地开发
@@ -69,23 +100,23 @@ wrangler deploy
 
 确保 `wrangler.toml` 已绑定 D1 数据库与静态资源（仓库已配置）。
 
-## 5. 前端使用发件功能（发件箱）
+## 6. 前端使用发件功能（发件箱）
 
 - 在首页先生成或选择一个邮箱地址。
-- 点击“发邮件”，填写收件人、主题与内容，点击发送。
-- 后端会调用 Resend API 发出邮件，并在数据库记录，前端可在“发件箱”查看记录与详情。
+- 点击"发邮件"，填写收件人、主题与内容，点击发送。
+- 后端会调用 Resend API 发出邮件，并在数据库记录，前端可在"发件箱"查看记录与详情。
 
 注意：
 - 发件地址为当前选中邮箱（形如 `xxx@你的域名`）。你的域名需在 Resend 已验证。
 - 若返回 `未配置 Resend API Key`，说明没有设置或没有以 Secret 形式提供 `RESEND_API_KEY`。
 
-## 6. 常见问题
+## 7. 常见问题
 
 - 403/Unauthorized：域名未验证或 From 与已验证域名不一致。
 - 429/限流：短时间大量请求，稍后重试或开启队列。
 - 中文/HTML 内容：本项目会将 HTML 直接提交给 Resend，同时自动生成纯文本版本，提升兼容性。
 
-## 7. 相关后端接口
+## 8. 相关后端接口
 
 - `POST /api/send` 发送单封邮件
 - `GET /api/sent?from=xxx@domain` 获取发件记录列表

@@ -1,12 +1,23 @@
-﻿﻿# Temp-Email 临时邮箱服务（基于 Cloudflare Workers）
+﻿﻿# Temp Email - 临时邮箱服务
 
-> 本项目基于 [idinging/freemail](https://github.com/idinging/freemail) 项目的代码进行修改和定制化开发
+[![Deploy to Cloudflare Workers](https://d1r7b50w78a6pv.cloudfront.net/deploy/button.svg)](https://dash.cloudflare.com/sign-up/workers-and-pages)
 
-一个基于 Cloudflare Workers 和 D1 数据库的临时邮箱服务，支持多域名、用户管理、邮件发送等高级功能。
+## 📋 目录
+- [项目概述](#-项目概述)
+- [🌟 功能特性](#-功能特性)
+- [📸 项目展示](#-项目展示)
+- [🔄 版本与路线图](#-版本与路线图)
+- [🔧 配置与部署](#-配置与部署)
+- [📋 API 文档](#-api-文档)
+- [🧪 测试与质量保证](#-测试与质量保证)
+- [📊 监控与告警](#-监控与告警)
+- [🔄 CI/CD 自动化](#-cicd-自动化)
+- [🛠️ 故障排除](#️-故障排除)
+- [许可证](#许可证)
 
-当前状态：V5.0 优化sql 大幅降低 行读取数，添加邮箱管理页面根据域名筛选以及登陆权限筛选
+## 📖 项目概述
 
-> 注：如果需要支持邮箱用户自行修改密码 将mailbox.html中 77行到80行取消注释
+这是一个基于 Cloudflare Workers 和 D1 数据库的临时邮箱服务，具有现代化界面和丰富的管理功能。
 
 ## 🌟 功能特性
 
@@ -55,15 +66,15 @@
 - 📈 **监控告警**：Cloudflare Workers Analytics 监控和告警配置
 - 🔄 **CI/CD**：GitHub Actions 自动化测试和部署流水线
 
-## 📸 项目展示
 
+## 📸 项目展示
 ### 体验地址： `https://tempmail.noxen.de5.net`
 
 ### 体验账号： 
 - 访客用户名：guest
 - 访客密码：123456
 
-更多展示详见：[展示文档](docs/zhanshi.md)
+更多展示详见：[展示文档](pic/)
 
 #### 登陆
 ![登陆页面](pic/dlu.png)
@@ -71,17 +82,11 @@
 #### 首页
 ![首页展示](pic/shouye.png)
 
-### 全部邮箱预览
 ![单个邮箱首页](./pic/v4/xiugaiquanju.png)
 ![单个邮箱首页](./pic/v4/liebiao.png)
 
-#### [更多展示点击查看](docs/zhanshi.md)
-
-### 手机端生成与历史
-<div style="display: flex; gap: 20px; justify-content: center; margin: 20px 0;">
-  <img src="./pic/phone/shouye.png" alt="手机端生成邮箱" style="height: 400px;" />
-  <img src="./pic/phone/lishi.png" alt="手机端历史邮箱" style="height: 400px;" />
-</div>
+### 全部邮箱预览
+#### [更多展示点击查看](pic/)
 
 ### 单个邮箱页
 ![单个邮箱首页](./pic/v4/youxiang.png)
@@ -198,7 +203,7 @@ npm run deploy
 - 自动刷新与基本的 UI 交互
 
 ### V2
-- [x] 前端模板解耦：将首页 UI 从 `public/app.js` 内联模板拆分为独立的 `public/templates/app.html`，降低耦合、便于维护
+- [x] 前端模板解耦合：将首页 UI 从 `public/app.js` 内联模板拆分为独立的 `public/templates/app.html`，降低耦合、便于维护
 - [x] 发件（Resend）与发件箱：支持通过 Resend 发送邮件、自定义发件显示名（`fromName`）
 - [x] 加邮箱置顶功能，提升用户体验
 - [X] 路由逻辑优化 防止首页泄露
@@ -231,7 +236,6 @@ npm run deploy
 - [X] **移动端专属界面**：针对手机屏幕优化的界面布局和交互方式
 - [X] **触控优化**：优化触屏操作体验，支持手势操作
 
-### V4 
 - [X] 添加支持邮箱单点登陆
 - [X] 添加全局邮箱管理功能，支持限制单个邮箱登陆
 - [X] 添加邮箱搜索功能，便捷寻找指定邮箱
@@ -256,20 +260,38 @@ npm run deploy
 - [ ] **多语言支持**：支持多语言界面和邮件内容处理
 - [ ] **高级安全**：增强的安全防护和威胁检测能力
 
-## 🛠️ 环境变量配置
+## 🔧 配置与部署
 
+### 快速部署
+
+1. 点击上方 "Deploy to Cloudflare Workers" 按钮
+2. 登录 Cloudflare 账户
+3. 配置环境变量
+4. 完成部署
+
+## 🛠️ 环境变量配置
 ### 必需环境变量
-- `MAIL_DOMAIN`：用于生成临时邮箱的域名，支持多个，使用逗号或空格分隔（如 `iding.asia, example.com`）
+- `MAIL_DOMAIN`：用于生成临时邮箱的域名，支持多个，使用逗号或空格分隔（如 `example.com, domain2.com`）
+  - 示例：`MAIL_DOMAIN="example.com,domain2.com"`
+  - 注意：确保已在 Cloudflare Email Routing 中添加 catch-all 规则，并绑定到该 Worker
 - `ADMIN_PASSWORD`：后台访问密码（严格管理员登录）
+  - 示例：`ADMIN_PASSWORD="your_secure_password"`
 - `JWT_TOKEN`：JWT 签名密钥（用于 API 认证）
+  - 示例：`JWT_TOKEN="your_jwt_secret_key"`
 
 ### 可选环境变量
 - `GUEST_PASSWORD`：访客登录密码（可选，启用 guest 账号）
+  - 示例：`GUEST_PASSWORD="guest_access_password"`
 - `ADMIN_NAME`：严格管理员用户名（默认 `admin`）
+  - 示例：`ADMIN_NAME="myadmin"`
 - `JWT_SECRET`：JWT 签名密钥（与 JWT_TOKEN 二选一，推荐使用 JWT_TOKEN）
+  - 示例：`JWT_SECRET="your_jwt_secret"`
 - `ADMIN_PASS`：与 ADMIN_PASSWORD 等价的别名（可选）
+  - 示例：`ADMIN_PASS="your_admin_password"`
 - `RESEND_API_KEY` / `RESEND_TOKEN`：Resend 发件配置。支持单密钥、多域名键值对、JSON格式
 - `FORWARD_RULES`：邮件转发（转发到指定邮箱）。支持两种格式：`JSON 数组` 或 `逗号分隔 KV`
+  - JSON格式示例：`FORWARD_RULES='[{"source":"*@example.com","target":"user@gmail.com"}]'`
+  - KV格式示例：`FORWARD_RULES="*@example.com=user@gmail.com,*@domain.com=user2@gmail.com"`
 
 ### RESEND_API_KEY / RESEND_TOKEN 多域名配置说明
 
@@ -296,39 +318,18 @@ npm run deploy
 - 批量发送时会自动按域名分组，并行处理以提升效率
 - 单密钥格式兼容旧版配置，可直接升级使用
 
-### FORWARD_RULES 示例
-> 说明：规则按前缀匹配，命中第一个前缀即转发；`*` 为兜底规则。未配置或设置为空/disabled/none 时不进行任何转发。
-
-- 逗号分隔（KV）：
-  - `FORWARD_RULES="vip=a@example.com,news=b@example.com,*=fallback@example.com"`
-- JSON 数组：
-  - `FORWARD_RULES='[{"prefix":"vip","email":"a@example.com"},{"prefix":"*","email":"fallback@example.com"}]'`
-- 仅指定某些前缀（无兜底）：
-  - `FORWARD_RULES="code=a@example.com,login=b@example.com"`
-- 禁用转发：
-  - `FORWARD_RULES=""` 或 `FORWARD_RULES="disabled"` 或 `FORWARD_RULES="none"` 或 `FORWARD_RULES="[]"`
-  转发的目标地址需要在 Cloudflare 的 Email Addresses 中添加/验证
+**配置工作原理：**
+系统在发送邮件时会执行以下步骤：
+1. **提取发件人域名**：从发件人邮箱地址（如 `user@domain1.com`）中提取域名部分（`domain1.com`）
+2. **查找对应密钥**：在配置中查找与该域名匹配的API密钥
+3. **智能选择密钥**：使用匹配的API密钥调用Resend API发送邮件
+4. **批量优化**：批量发送时，系统会自动按域名分组，并行处理以提升效率
 
 ## 📋 API 文档
 
-### 根管理员令牌（Root Admin Override）
-
-- 当请求携带与 `wrangler.toml` 配置项 `JWT_TOKEN` 相同的令牌时，将被视为最高管理员（strictAdmin）。
-- 支持三种携带方式（任一即可）：
-  - Authorization 头：`Authorization: Bearer <JWT_TOKEN>`
-  - 自定义头：`X-Admin-Token: <JWT_TOKEN>`
-  - URL 查询参数：`?admin_token=<JWT_TOKEN>`
-- 适用范围：所有 `/api/*` 接口、`/api/session`、`/receive` 以及管理页访问判定。
-
-完整接口说明已迁移至独立文档，包含登录认证、邮箱与邮件、发件（Resend）以及"用户管理"相关接口。
-
-- 查看文档：[`docs/api.md`](docs/api.md)
-
-详见《[V3 版本更新日志](docs/v3.md)》。
+请参阅 [API 文档](docs/api.md) 获取完整的 API 接口说明。
 
 ## 🧪 测试与质量保证
-
-项目已配置完整的测试框架，确保代码质量和功能稳定性。
 
 ### 运行测试
 
@@ -367,14 +368,6 @@ npm run type-check
 - **覆盖率**：@vitest/coverage-v8（覆盖率统计）
 
 ## 📈 监控与告警
-
-项目提供完善的监控配置，确保生产环境稳定运行。
-
-### Cloudflare Workers Analytics
-
-- **实时监控**：通过 Workers Analytics 实时监控请求量、错误率、响应时间
-- **自定义指标**：支持自定义业务指标监控
-- **日志集成**：结构化日志记录，支持日志搜索和分析
 
 ### 健康检查端点
 
@@ -460,27 +453,6 @@ curl -X GET https://your-worker.workers.dev/api/health
    - 确认已选中邮箱地址
    - 检查浏览器是否支持 Page Visibility API
    - 查看网络连接是否稳定
-
-### 调试技巧
-- 使用 `wrangler dev` 进行本地调试
-- 查看 Worker 的实时日志：`wrangler tail`
-- 使用浏览器开发者工具检查网络请求
-- 检查 D1 数据库中的数据：
-  - 本地环境：`npm run d1:query:local -- --command "SELECT * FROM mailboxes LIMIT 10"`
-  - 生产环境：`npm run d1:query:remote -- --command "SELECT * FROM mailboxes LIMIT 10"`
-
-> 本地查询/初始化请使用 --local（或 :local 脚本）；远程查询/初始化请使用 --remote（或 :remote 脚本）。
-
-## Buy me a coffee
-
-如果你觉得本项目对你有帮助，欢迎赞赏支持：
-
-<p align="left">
-  <img src="pic/donate-alipay.jpg" alt="支付宝赞赏码" height="400" />
-  <img src="pic/donate-wechat.jpg" alt="微信赞赏码" height="400" />
-  <br/>
-  <em>请将你的赞赏码图片保存为上述文件名并放置到 pic/ 目录。</em>
-</p>
 
 ## 许可证
 
