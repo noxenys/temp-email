@@ -51,21 +51,32 @@ try {
   console.log('📦 检查 Wrangler 可用性...');
   execSync('npx wrangler --version', { stdio: 'inherit' });
   
-  // 2. 创建 D1 数据库（如果不存在）
+  // 2. 设置 Cloudflare 认证
+  console.log('🔐 设置 Cloudflare 认证...');
+  if (process.env.CLOUDFLARE_API_TOKEN && process.env.CLOUDFLARE_ACCOUNT_ID) {
+    // 设置环境变量供 wrangler 使用
+    process.env.CLOUDFLARE_ACCOUNT_ID = process.env.CLOUDFLARE_ACCOUNT_ID;
+    process.env.CLOUDFLARE_API_TOKEN = process.env.CLOUDFLARE_API_TOKEN;
+    console.log('✅ Cloudflare 认证已设置');
+  } else {
+    console.warn('⚠️ Cloudflare 认证信息未提供，数据库操作可能失败');
+  }
+  
+  // 3. 创建 D1 数据库（如果不存在）
   console.log('🗄️ 检查并创建 D1 数据库...');
   try {
-    // 先检查数据库是否已存在（移除 --remote 参数）
-    const dbList = execSync(`npx wrangler d1 list`, { encoding: 'utf8' });
-    if (dbList.includes(DATABASE_NAME)) {
+    // 先检查数据库是否已存在
+    const dbList = execSync(`npx wrangler d1 list --json`, { encoding: 'utf8' });
+    const databases = JSON.parse(dbList);
+    
+    const existingDb = databases.find(d => d.name === DATABASE_NAME);
+    if (existingDb) {
       console.log('ℹ️ D1 数据库已存在，跳过创建');
       
       // 获取现有数据库ID并确保配置正确
-      const databaseId = await getDatabaseId();
-      if (databaseId) {
-        await updateWranglerConfig(databaseId);
-      }
+      await updateWranglerConfig(existingDb.uuid);
     } else {
-      // 移除 --remote 参数，让 wrangler 自动处理
+      // 创建新数据库
       execSync(`npx wrangler d1 create ${DATABASE_NAME}`, { stdio: 'inherit' });
       console.log('✅ D1 数据库创建成功');
       
@@ -88,19 +99,26 @@ try {
   console.log('🔍 检查数据库是否已初始化...');
   let isDatabaseInitialized = false;
   try {
-    // 首先检查数据库是否存在（移除 --remote 参数）
-    const dbList = execSync(`npx wrangler d1 list`, { encoding: 'utf8' });
-    if (!dbList.includes(DATABASE_NAME)) {
+    // 首先检查数据库是否存在
+    const dbList = execSync(`npx wrangler d1 list --json`, { encoding: 'utf8' });
+    const databases = JSON.parse(dbList);
+    
+    const existingDb = databases.find(d => d.name === DATABASE_NAME);
+    if (!existingDb) {
       console.log('⚠️ 数据库不存在，需要重新创建和初始化');
       isDatabaseInitialized = false;
     } else {
-      // 数据库存在，再检查是否已初始化（移除 --remote 参数）
-      const checkResult = execSync(`npx wrangler d1 execute ${DATABASE_NAME} --command="SELECT name FROM sqlite_master WHERE type=\'table\' AND name=\'mailboxes\'"`, { encoding: 'utf8' });
-      if (checkResult.includes('mailboxes')) {
-        isDatabaseInitialized = true;
-        console.log('✅ 数据库已初始化，跳过初始化步骤');
-      } else {
-        console.log('ℹ️ 数据库存在但未初始化，准备初始化...');
+      // 数据库存在，再检查是否已初始化
+      try {
+        const checkResult = execSync(`npx wrangler d1 execute ${DATABASE_NAME} --command="SELECT name FROM sqlite_master WHERE type=\'table\' AND name=\'mailboxes\'"`, { encoding: 'utf8' });
+        if (checkResult.includes('mailboxes')) {
+          isDatabaseInitialized = true;
+          console.log('✅ 数据库已初始化，跳过初始化步骤');
+        } else {
+          console.log('ℹ️ 数据库存在但未初始化，准备初始化...');
+        }
+      } catch (checkError) {
+        console.log('ℹ️ 无法检查数据库表状态，准备初始化...');
       }
     }
   } catch (error) {
@@ -111,7 +129,6 @@ try {
   if (!isDatabaseInitialized) {
     console.log('🔧 执行数据库初始化...');
     try {
-      // 移除 --remote 参数
       execSync(`npx wrangler d1 execute ${DATABASE_NAME} --file=d1-init.sql`, { stdio: 'inherit' });
       console.log('✅ 数据库初始化成功');
     } catch (error) {
@@ -119,7 +136,6 @@ try {
       // 尝试使用基础初始化脚本作为备选方案
       try {
         console.log('🔄 尝试使用基础初始化脚本...');
-        // 移除 --remote 参数
         execSync(`npx wrangler d1 execute ${DATABASE_NAME} --file=d1-init-basic.sql`, { stdio: 'inherit' });
         console.log('✅ 数据库基础初始化成功');
       } catch (fallbackError) {

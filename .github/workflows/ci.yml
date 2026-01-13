@@ -26,7 +26,7 @@ jobs:
       run: npm install -g wrangler
       
     - name: Deploy to Cloudflare Workers
-      run: node deploy-github-actions.js
+      run: node deploy-simple.js
       env:
           # Cloudflare 认证信息
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
