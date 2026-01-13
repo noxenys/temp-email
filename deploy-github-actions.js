@@ -138,6 +138,7 @@ try {
     { name: 'JWT_TOKEN', value: process.env.JWT_TOKEN },
     { name: 'JWT_SECRET', value: process.env.JWT_SECRET },
     { name: 'MAIL_DOMAIN', value: process.env.MAIL_DOMAIN },
+    { name: 'D1_DATABASE_ID', value: process.env.D1_DATABASE_ID },
     
     // 可选环境变量（不填写不影响项目正常使用）
     { name: 'GUEST_PASSWORD', value: process.env.GUEST_PASSWORD },

@@ -34,9 +34,10 @@ jobs:
           
           # 必需环境变量
           ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
-          JWT_TOKEN: ${{ secrets.JWT_TOKEN }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          JWT_TOKEN: ${{ secrets.JWT_TOKEN }}  # 用于根管理员覆盖
           MAIL_DOMAIN: ${{ secrets.MAIL_DOMAIN }}
+          D1_DATABASE_ID: ${{ secrets.D1_DATABASE_ID }}  # D1数据库ID
           
           # 可选环境变量（不填写不影响项目正常使用）
           GUEST_PASSWORD: ${{ secrets.GUEST_PASSWORD }}

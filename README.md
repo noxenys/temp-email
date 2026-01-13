@@ -65,7 +65,24 @@
 - 🧪 **测试框架**：完整的单元测试和集成测试套件（Vitest + ESLint）
 - 📈 **监控告警**：Cloudflare Workers Analytics 监控和告警配置
 - 🔄 **CI/CD**：GitHub Actions 自动化测试和部署流水线
+- 🔐 **环境变量配置**：支持通过环境变量灵活配置，便于CI/CD集成
 
+
+## 🏗️ 系统架构
+
+### 核心组件
+
+- **Cloudflare Workers**：无服务器计算平台，处理HTTP请求和业务逻辑
+- **D1 Database**：SQL数据库，存储邮箱、邮件和用户信息
+- **R2 Storage**：对象存储，保存完整的邮件内容（EML格式）
+- **Email Routing**：邮件路由服务，将收到的邮件转发到Worker处理
+- **Workers KV**：键值存储，用于缓存和会话管理（可选）
+
+### 数据流向
+
+1. **邮件接收**：外部邮件 → Cloudflare Email Routing → Worker → R2 (EML文件) → D1 (元数据)
+2. **邮件发送**：用户请求 → Worker → Resend API → 外部邮件服务器
+3. **数据访问**：用户请求 → Worker → D1 (元数据) → R2 (完整内容) → 响应用户
 
 ## 📸 项目展示
 ### 体验地址： `https://tempmail.noxen.de5.net`
@@ -153,34 +170,33 @@ npm run deploy
    - `MAIL_DOMAIN`：你的邮箱域名，多个域名用逗号分隔
    - `ADMIN_PASSWORD`：管理员密码
    - `JWT_TOKEN`：用于 API 认证的令牌
+   - `JWT_SECRET`：用于 API 认证的 JWT 密钥
+   - `D1_DATABASE_ID`：D1数据库ID（智能部署脚本会自动设置）
 
 4.  **部署到 Cloudflare**
 
     ```bash
-    wrangler deploy
+    npm run deploy
     ```
 
-    部署过程中，Wrangler 会自动创建 `wrangler.toml` 中定义的 D1 数据库 (`temp_email_db`) 和 R2 存储桶 (`temp-mail-eml`)。
+    智能部署脚本会自动：
+    - 检测并创建D1数据库 (`temp_email_db`)
+    - 初始化数据库表结构
+    - 设置环境变量
+    - 部署到Cloudflare Workers
+    - 创建R2存储桶 (`temp-mail-eml`)
 
-5.  **初始化数据库**
-
-    首次部署后，需要执行以下命令来初始化数据库表结构：
-
+    或者使用直接部署（不包含智能初始化）：
     ```bash
-    npm run d1:execute-basic:remote
+    npm run deploy:direct
     ```
 
-6.  **配置邮件路由**
+5.  **配置邮件路由**
 
     为了接收邮件，你需要在 Cloudflare 控制台设置邮件路由：
-
-    *   前往你的域名 > **Email** > **Email Routing**。
-    *   在 **Routes** 选项卡下，点击 **Add catch-all**。
-    *   在 **Action** 中选择 **Send to a Worker**。
-    *   在 **Worker** 下拉菜单中，选择你刚刚部署的 Worker (`temp-email`)。
-    *   点击 **Save**。
-
-至此，你的临时邮箱服务已成功部署！
+    - 进入 Cloudflare Dashboard → Workers & Pages → Email Routing
+    - 添加邮件路由规则，将 `*${MAIL_DOMAIN}` 路由到你的 Worker
+    - 确保域名已正确配置并激活邮件路由
 
 ### 邮件路由配置（必需用于收取真实邮件）
 
@@ -276,16 +292,17 @@ npm run deploy
   - 注意：确保已在 Cloudflare Email Routing 中添加 catch-all 规则，并绑定到该 Worker
 - `ADMIN_PASSWORD`：后台访问密码（严格管理员登录）
   - 示例：`ADMIN_PASSWORD="your_secure_password"`
-- `JWT_TOKEN`：JWT 签名密钥（用于 API 认证）
-  - 示例：`JWT_TOKEN="your_jwt_secret_key"`
+- `JWT_TOKEN` 或 `JWT_SECRET`：JWT 签名密钥（二选一，推荐使用 JWT_TOKEN）
+  - 示例：`JWT_TOKEN="your_jwt_token"` 或 `JWT_SECRET="your_jwt_secret_key"`
+- `D1_DATABASE_ID`：D1 数据库ID（用于绑定数据库连接）
+  - 示例：`D1_DATABASE_ID="your_d1_database_id_here"`
+  - 注意：此ID在创建D1数据库后自动生成，部署脚本会自动处理
 
 ### 可选环境变量
 - `GUEST_PASSWORD`：访客登录密码（可选，启用 guest 账号）
   - 示例：`GUEST_PASSWORD="guest_access_password"`
 - `ADMIN_NAME`：严格管理员用户名（默认 `admin`）
   - 示例：`ADMIN_NAME="myadmin"`
-- `JWT_SECRET`：JWT 签名密钥（与 JWT_TOKEN 二选一，推荐使用 JWT_TOKEN）
-  - 示例：`JWT_SECRET="your_jwt_secret"`
 - `ADMIN_PASS`：与 ADMIN_PASSWORD 等价的别名（可选）
   - 示例：`ADMIN_PASS="your_admin_password"`
 - `RESEND_API_KEY` / `RESEND_TOKEN`：Resend 发件配置。支持单密钥、多域名键值对、JSON格式
@@ -326,8 +343,20 @@ npm run deploy
 4. **批量优化**：批量发送时，系统会自动按域名分组，并行处理以提升效率
 
 ## 📋 API 文档
+### 根管理员令牌（Root Admin Override）
 
-请参阅 [API 文档](docs/api.md) 获取完整的 API 接口说明。
+- 当请求携带与环境变量 `JWT_TOKEN` 相同的令牌时，将被视为最高管理员（strictAdmin），可绕过常规身份验证。
+- 支持三种携带方式（任一即可）：
+  - Authorization 头：`Authorization: Bearer <JWT_TOKEN>`
+  - 自定义头：`X-Admin-Token: <JWT_TOKEN>`
+  - URL 查询参数：`?admin_token=<JWT_TOKEN>`
+- 适用范围：所有 `/api/*` 接口、`/api/session`、`/receive` 以及管理页访问判定。
+
+完整接口说明已迁移至独立文档，包含登录认证、邮箱与邮件、发件（Resend）以及"用户管理"相关接口。
+
+- 查看文档：[`docs/api.md`](docs/api.md)
+
+详见《[V3 版本更新日志](docs/v3.md)》。
 
 ## 🧪 测试与质量保证
 
@@ -337,21 +366,20 @@ npm run deploy
 # 安装依赖
 npm install
 
-# 运行所有测试
-npm test
-
-# 运行测试并生成覆盖率报告
-npm run test:coverage
-
-# 监听模式运行测试（开发时使用）
-npm run test:watch
-
 # 代码检查
 npm run lint
 
 # 类型检查
 npm run type-check
+
+# 构建项目
+npm run build
 ```
+
+目前项目包含以下质量保证措施：
+- **代码检查**：ESLint 配置确保代码风格一致性
+- **类型检查**：TypeScript 类型安全检查
+- **构建验证**：确保代码能够正确打包
 
 ### 测试覆盖范围
 
@@ -407,49 +435,60 @@ curl -X GET https://your-worker.workers.dev/api/health
 
 项目配置了 GitHub Actions CI/CD 流水线，实现一键自动化部署：
 
+### 🔄 CI/CD 自动化
 ### 部署流程
 
 1. **代码检查**：ESLint 代码质量检查
 2. **类型检查**：TypeScript 类型安全检查
-3. **单元测试**：运行所有测试并生成覆盖率报告
+3. **构建验证**：确保项目能正确构建
 4. **一键部署**：自动部署到 Cloudflare Workers，包含数据库创建和初始化
 
 ### 触发方式
 
 - **自动触发**：推送代码到 `main` 分支时自动部署
 - **手动触发**：在 GitHub Actions 页面手动运行部署工作流
-- **生产环境**：代码审查后手动部署到生产环境
 
 ### 数据库与存储配置
 
 - 数据库名称为 `temp_email_db`，绑定名为 `TEMP_MAIL_DB`
 - R2存储桶名称为 `temp-mail-eml`，绑定名为 `MAIL_EML`
+- 智能部署脚本会自动处理数据库创建和环境变量配置
 
 ## 🛠️ 故障排除
 
 ### 常见问题
-1. **邮件接收不到**
-   - 检查 Cloudflare 邮件路由配置是否正确
-   - 确认域名的 MX 记录设置
-   - 验证 MAIL_DOMAIN 环境变量配置
+1. **部署失败**
+   - 确保已正确配置 Cloudflare API Token
+   - 检查账户是否有足够的权限
+   - 确认环境变量已正确设置
+   - 使用 `npm run deploy` 而不是 `wrangler deploy` 以获得智能初始化功能
 
-2. **数据库连接错误**
-   - 确认 D1 数据库绑定名称为 TEMP_MAIL_DB
-   - **模式 A**：确认 wrangler 已自动创建 D1/R2 资源并回写配置到 wrangler.toml；必要时重新执行 `wrangler deploy`
-   - **模式 B**：检查 database_id / bucket_name 是否已正确填入 wrangler.toml 配置
-   - 运行 `wrangler d1 list` 确认数据库存在
+2. **邮件无法接收**
+   - 检查邮件路由是否已正确配置
+   - 确认域名DNS设置正确
+   - 验证邮箱域名与MAIL_DOMAIN环境变量一致
 
-3. **登录问题**
+3. **数据库连接错误**
+   - 检查D1数据库是否已创建
+   - 确认database_id配置正确
+   - 运行 `npm run deploy` 让智能脚本自动处理数据库配置
+
+4. **环境变量配置问题**
+   - 确保必需的环境变量已正确设置（MAIL_DOMAIN, ADMIN_PASSWORD, JWT_SECRET）
+   - JWT_SECRET 用于JWT令牌签名，JWT_TOKEN 用于根管理员覆盖（可选）
+   - 检查D1_DATABASE_ID是否已正确设置（智能部署脚本会自动处理）
+
+5. **登录问题**
    - 确认 ADMIN_PASSWORD 环境变量已设置
-   - 检查 JWT_TOKEN 或 JWT_SECRET 配置
+   - 检查 JWT_SECRET 配置（必需）和 JWT_TOKEN 配置（可选，用于根管理员）
    - 尝试清除浏览器缓存和 Cookie
 
-4. **界面显示异常**
+6. **界面显示异常**
    - 确认静态资源路径配置正确
    - 检查浏览器控制台是否有 JavaScript 错误
    - 验证 CSS 文件加载是否正常
 
-5. **自动刷新不工作**
+7. **自动刷新不工作**
    - 确认已选中邮箱地址
    - 检查浏览器是否支持 Page Visibility API
    - 查看网络连接是否稳定
