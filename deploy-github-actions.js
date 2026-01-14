@@ -87,114 +87,25 @@ async function getDatabaseId() {
 }
 
 try {
-  // 1. 检查 Wrangler 是否可用
   console.log('📦 检查 Wrangler 可用性...');
   execSync('npx wrangler --version', { stdio: 'inherit' });
-  
-  // 2. 设置 Cloudflare 认证
   console.log('🔐 设置 Cloudflare 认证...');
   if (process.env.CLOUDFLARE_API_TOKEN && process.env.CLOUDFLARE_ACCOUNT_ID) {
-    // 设置环境变量供 wrangler 使用
     process.env.CLOUDFLARE_ACCOUNT_ID = process.env.CLOUDFLARE_ACCOUNT_ID;
     process.env.CLOUDFLARE_API_TOKEN = process.env.CLOUDFLARE_API_TOKEN;
     console.log('✅ Cloudflare 认证已设置');
   } else {
-    console.warn('⚠️ Cloudflare 认证信息未提供，数据库操作可能失败');
+    console.warn('⚠️ Cloudflare 认证信息未提供，可能无法访问远程资源');
   }
-  
-  // 3. 创建 D1 数据库（如果不存在）
-  console.log('🗄️ 检查并创建 D1 数据库...');
-  try {
-    // 先检查数据库是否已存在
-    const dbList = execSync(`npx wrangler d1 list --json`, { encoding: 'utf8' });
-    const databases = JSON.parse(dbList);
-    
-    const existingDb = databases.find(d => d.name === DATABASE_NAME);
-    if (existingDb) {
-      console.log('ℹ️ D1 数据库已存在，跳过创建');
-      
-      // 获取现有数据库ID并确保配置正确
-      await updateWranglerConfig(existingDb.uuid);
-    } else {
-      // 创建新数据库
-      execSync(`npx wrangler d1 create ${DATABASE_NAME}`, { stdio: 'inherit' });
-      console.log('✅ D1 数据库创建成功');
-      
-      // 获取新创建的数据库ID并更新配置
-      const databaseId = await getDatabaseId();
-      if (databaseId) {
-        await updateWranglerConfig(databaseId);
-      }
-    }
-  } catch (error) {
-    console.warn('⚠️ 检查或创建数据库时出错，但继续部署:', error.message);
-    // 即使出错也要尝试获取现有数据库ID
-    const databaseId = await getDatabaseId();
-    if (databaseId) {
-      await updateWranglerConfig(databaseId);
-    }
-  }
-  
-  // 3. 检查数据库是否已初始化（通过检查表是否存在）
-  console.log('🔍 检查数据库是否已初始化...');
-  let isDatabaseInitialized = false;
-  try {
-    // 首先检查数据库是否存在
-    const dbList = execSync(`npx wrangler d1 list --json`, { encoding: 'utf8' });
-    const databases = JSON.parse(dbList);
-    
-    const existingDb = databases.find(d => d.name === DATABASE_NAME);
-    if (!existingDb) {
-      console.log('⚠️ 数据库不存在，需要重新创建和初始化');
-      isDatabaseInitialized = false;
-    } else {
-      // 数据库存在，再检查是否已初始化
-      try {
-        const checkResult = execSync(`npx wrangler d1 execute ${DATABASE_NAME} --command="SELECT name FROM sqlite_master WHERE type=\'table\' AND name=\'mailboxes\'"`, { encoding: 'utf8' });
-        if (checkResult.includes('mailboxes')) {
-          isDatabaseInitialized = true;
-          console.log('✅ 数据库已初始化，跳过初始化步骤');
-        } else {
-          console.log('ℹ️ 数据库存在但未初始化，准备初始化...');
-        }
-      } catch (checkError) {
-        console.log('ℹ️ 无法检查数据库表状态，准备初始化...');
-      }
-    }
-  } catch (error) {
-    console.log('ℹ️ 无法确认数据库初始化状态，准备初始化...');
-  }
-
-  // 4. 只有在数据库未初始化时才执行初始化
-  if (!isDatabaseInitialized) {
-    console.log('🔧 执行数据库初始化...');
-    try {
-      execSync(`npx wrangler d1 execute ${DATABASE_NAME} --file=d1-init.sql`, { stdio: 'inherit' });
-      console.log('✅ 数据库初始化成功');
-    } catch (error) {
-      console.error('❌ 数据库初始化失败:', error.message);
-      // 尝试使用基础初始化脚本作为备选方案
-      try {
-        console.log('🔄 尝试使用基础初始化脚本...');
-        execSync(`npx wrangler d1 execute ${DATABASE_NAME} --file=d1-init-basic.sql`, { stdio: 'inherit' });
-        console.log('✅ 数据库基础初始化成功');
-      } catch (fallbackError) {
-        console.warn('⚠️ 基础初始化也失败，但继续部署:', fallbackError.message);
-      }
-    }
-  } else {
-    console.log('⏭️ 数据库已存在，跳过初始化步骤');
-  }
-  
-  // 4. 设置环境变量（如果提供了）
-  console.log('🔧 设置环境变量...');
-  
-  // 首先确保D1_DATABASE_ID环境变量已设置
-  let databaseId = await getDatabaseId();
+  console.log('🗄️ 配置 D1 数据库绑定...');
+  const databaseId = process.env.D1_DATABASE_ID;
   if (databaseId) {
-    process.env.D1_DATABASE_ID = databaseId;
-    console.log(`✅ 已设置D1_DATABASE_ID环境变量: ${databaseId}`);
+    await updateWranglerConfig(databaseId);
+    console.log(`✅ 已使用环境变量 D1_DATABASE_ID 更新数据库绑定: ${databaseId}`);
+  } else {
+    console.log('ℹ️ 未提供 D1_DATABASE_ID，跳过数据库绑定更新');
   }
+  console.log('🔧 设置环境变量...');
   
   const envVars = [
     // 必需环境变量
@@ -205,13 +116,19 @@ try {
     { name: 'D1_DATABASE_ID', value: process.env.D1_DATABASE_ID },
     
     // 可选环境变量（不填写不影响项目正常使用）
-    { name: 'GUEST_PASSWORD', value: process.env.GUEST_PASSWORD },
+    { name: 'ADMIN_NAME', value: process.env.ADMIN_NAME },
     { name: 'ADMIN_USERNAME', value: process.env.ADMIN_USERNAME },
     { name: 'ADMIN_PASS', value: process.env.ADMIN_PASS },
+    { name: 'GUEST_PASSWORD', value: process.env.GUEST_PASSWORD },
     { name: 'RESEND_API_KEY', value: process.env.RESEND_API_KEY },
     { name: 'RESEND_TOKEN', value: process.env.RESEND_TOKEN },
+    { name: 'RESEND', value: process.env.RESEND },
     { name: 'FORWARD_RULES', value: process.env.FORWARD_RULES },
-    { name: 'CACHE_TTL', value: process.env.CACHE_TTL }
+    { name: 'CACHE_TTL', value: process.env.CACHE_TTL },
+    { name: 'TELEGRAM_BOT_TOKEN', value: process.env.TELEGRAM_BOT_TOKEN },
+    { name: 'TELEGRAM_CHAT_ID', value: process.env.TELEGRAM_CHAT_ID },
+    { name: 'MAX_EMAIL_SIZE', value: process.env.MAX_EMAIL_SIZE },
+    { name: 'EMAIL_RETENTION_DAYS', value: process.env.EMAIL_RETENTION_DAYS }
   ];
   
   for (const envVar of envVars) {

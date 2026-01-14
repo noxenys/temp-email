@@ -40,10 +40,16 @@ jobs:
           D1_DATABASE_ID: ${{ secrets.D1_DATABASE_ID }}  # D1数据库ID
           
           # 可选环境变量（不填写不影响项目正常使用）
-          GUEST_PASSWORD: ${{ secrets.GUEST_PASSWORD }}
+          ADMIN_NAME: ${{ secrets.ADMIN_NAME }}
           ADMIN_USERNAME: ${{ secrets.ADMIN_USERNAME }}
           ADMIN_PASS: ${{ secrets.ADMIN_PASS }}
+          GUEST_PASSWORD: ${{ secrets.GUEST_PASSWORD }}
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
           RESEND_TOKEN: ${{ secrets.RESEND_TOKEN }}
+          RESEND: ${{ secrets.RESEND }}
           FORWARD_RULES: ${{ secrets.FORWARD_RULES }}
           CACHE_TTL: ${{ secrets.CACHE_TTL }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          MAX_EMAIL_SIZE: ${{ secrets.MAX_EMAIL_SIZE }}
+          EMAIL_RETENTION_DAYS: ${{ secrets.EMAIL_RETENTION_DAYS }}
