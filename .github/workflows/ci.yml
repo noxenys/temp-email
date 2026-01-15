@@ -8,7 +8,9 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    
+    env:
+      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      WORKER_URL: ${{ secrets.WORKER_URL }}
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -50,10 +52,7 @@ jobs:
           EMAIL_RETENTION_DAYS: ${{ secrets.EMAIL_RETENTION_DAYS }}
 
     - name: Set and check Telegram Webhook
-      if: ${{ secrets.TELEGRAM_BOT_TOKEN != '' && secrets.WORKER_URL != '' }}
-      env:
-        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-        WORKER_URL: ${{ secrets.WORKER_URL }}
+      if: ${{ env.TELEGRAM_BOT_TOKEN != '' && env.WORKER_URL != '' }}
       run: |
         WORKER_BASE="${WORKER_URL%/}"
         WEBHOOK_URL="${WORKER_BASE}/telegram/webhook"
