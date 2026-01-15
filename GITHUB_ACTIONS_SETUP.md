@@ -51,14 +51,46 @@
 6. 生成并复制Token
 
 ### 验证部署
-配置完成后，GitHub Actions应该能够正常部署。您可以通过以下方式验证：
+配置完成后，GitHub Actions 应该能够正常部署。您可以通过以下方式验证：
 
 1. 手动触发工作流：
-   - 前往 Actions 标签页
-   - 选择 "一键部署到 Cloudflare Workers"
-   - 点击 "Run workflow"
+   - 前往仓库的 **Actions** 标签页
+   - 选择 **Deploy to Cloudflare Workers** 工作流
+   - 点击 **Run workflow**
 
-2. 或者推送新的更改到main分支
+2. 或者推送新的更改到 `main` 分支
+
+### 同步作者仓库的更新（上游同步示例）
+
+如果您是通过 **Fork 本仓库 + GitHub Actions** 部署的，建议配置上游（upstream）远程，以便跟随作者更新：
+
+1. 在本地克隆您的 Fork 仓库：
+
+```bash
+git clone https://github.com/<your-name>/temp-mail.git
+cd temp-mail
+```
+
+2. 添加上游远程（指向作者仓库）：
+
+```bash
+git remote add upstream https://github.com/noxenys/temp-mail.git
+```
+
+3. 需要同步最新代码时，在本地执行：
+
+```bash
+git fetch upstream
+git merge upstream/main
+```
+
+4. 将合并后的代码推送回您的 Fork 仓库（会触发 Actions 部署）：
+
+```bash
+git push origin main
+```
+
+完成以上步骤后，您的仓库会跟随作者仓库保持更新，GitHub Actions 会在您 `push` 到自己的仓库时自动重新部署到您的 Cloudflare 账户。
 
 ### 故障排除
 如果仍然失败，请检查：

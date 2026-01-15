@@ -1,34 +1,42 @@
 ﻿# 📧 Temp-Mail - 现代化临时邮箱服务
 
 # 📋 目录
-- [项目概述](#-项目概述)
-- [🌟 功能特性](#-功能特性)
-- [🏗️ 系统架构](#️-系统架构)
+- [📖 项目概述](#-项目概述)
 - [📸 项目展示](#-项目展示)
+- [🌟 功能特性](#-功能特性)
+- [🤖 Telegram Bot 集成](#-telegram-bot-集成)
+- [🏗️ 系统架构](#️-系统架构)
 - [🚀 部署指南](#-部署指南)
-- [� 配置与部署](#-配置与部署)
-- [�️ 环境变量配置](#-环境变量配置)
-- [📋 API 文档](#-api-文档)
+  - [推荐部署方式](#推荐部署方式)
+  - [Cloudflare 一键部署](#方案一cloudflare-一键部署)
+  - [GitHub Actions 自动部署](#方案二github-actions-自动部署推荐生产环境)
+  - [本地一键部署](#方案三本地一键部署)
+- [📧 配置邮件路由](#-配置邮件路由)
+- [🛠️ 环境变量配置](#️-环境变量配置)
 - [📁 项目结构](#-项目结构)
+- [🗄️ 数据库结构](#️-数据库结构)
+- [🗂️ Wrangler 配置](#️-wrangler-配置)
+- [🗄️ D1 数据库操作](#️-d1-数据库操作)
+- [📋 API 文档](#-api-文档)
+- [🛡️ 安全特性](#️-安全特性)
 - [🧪 测试与质量保证](#-测试与质量保证)
 - [📊 监控与告警](#-监控与告警)
 - [🔄 CI/CD 自动化](#-cicd-自动化)
-- [🗄️ 数据库结构](#️-数据库结构)
-- [🗂️ Wrangler 配置](#️-wrangler-配置)
-- [ 代码质量](#-代码质量)
-- [🗄️ D1 数据库操作](#️-d1-数据库操作)
-- [�️ 安全特性](#️-安全特性)
-- [� 版本与路线图](#-版本与路线图)
-- [🚀 快速开始（Quick Start）](#-快速开始quick-start)
-- [⚙️ 配置（Configuration）](#️-配置configuration)
-- [🚀 部署（Deploy）](#-部署deploy)
-- [❓ 常见问题（Troubleshooting）](#-常见问题troubleshooting)
+- [❓ 常见问题](#-常见问题)
+- [🔄 版本与路线图](#-版本与路线图)
 - [🤝 贡献](#-贡献)
 - [📄 许可证](#-许可证)
 
 # 📖 项目概述
 
 这是一个基于 Cloudflare Workers 和 D1 数据库的临时邮箱服务，具有现代化界面和丰富的管理功能。
+
+# 📸 项目展示
+### 体验地址： `https://tempmail.noxen.de5.net`
+
+### 体验账号： 
+- 访客用户名：guest
+- 访客密码：123456
 
 # 🌟 功能特性
 
@@ -73,9 +81,9 @@
 - 🛡️ **风控与反滥用**：支持按发件邮箱 / 域名维度的黑名单拦截，阻止垃圾与滥用邮件进入收件箱
 - 🌟 **重要邮件保护**：支持将邮件标记为“置顶/重要”，自动清理时会跳过这些邮件；支持按邮箱自定义保留天数
 - 🧩 **后台运维面板**：后台支持查看和管理黑名单、邮箱登录权限与保留策略，便于日常运维
- - 🤖 **Bot 收信支持**：可通过 Telegram Bot 管理邮箱、拉取最新邮件和验证码，在聊天界面收取/查看临时邮箱的收件情况
+- 🤖 **Bot 收信支持**：可通过 Telegram Bot 管理邮箱、拉取最新邮件和验证码，在聊天界面收取/查看临时邮箱的收件情况
 
-### 🤖 Telegram Bot 使用说明
+## 🤖 Telegram Bot 集成
 
 - 启用条件：配置 `TELEGRAM_BOT_TOKEN` 和 `TELEGRAM_CHAT_ID` 环境变量。
 - 核心命令：
@@ -113,7 +121,7 @@ foo123@example.com
 - 📐 **响应式布局**：通过 CSS 媒体查询与 app-mobile.js，在手机上自动切换为单列布局，并重排侧栏/历史邮箱视图
 - 🧭 **视图分级导航**：移动端将首页拆分为“生成邮箱 / 历史邮箱 / 收件箱”三级视图，顶部使用分段按钮和返回栈管理导航，而不是固定底部导航栏
 - ✉️ **二级页操作条**：在移动端收件箱视图中，将“发送邮件/清空邮件”等操作收拢为吸顶操作条，提升可触达性
-- � **自动刷新体验优化**：移动端同样支持自动刷新邮件列表，刷新按钮收纳为标题栏图标，避免占用竖屏空间
+- 🔄 **自动刷新体验优化**：移动端同样支持自动刷新邮件列表，刷新按钮收纳为标题栏图标，避免占用竖屏空间
 - 📝 **简化操作**：移动端隐藏部分非核心控件，只保留最常用的收件/发件操作，减少干扰
 
 ## 🔧 技术特性
@@ -140,7 +148,7 @@ foo123@example.com
 - **连接池管理**：优化数据库连接池配置，提高并发处理能力
 - **代码分割**：按需加载 JavaScript 模块，减少初始加载时间
 
-## 🏗️ 系统架构
+# 🏗️ 系统架构
 
 ### 核心组件
 
@@ -156,16 +164,16 @@ foo123@example.com
 2. **邮件发送**：用户请求 → Worker → Resend API → 外部邮件服务器
 3. **数据访问**：用户请求 → Worker → D1 (元数据) → R2 (完整内容) → 响应用户
 
-## 📸 项目展示
-### 体验地址： `https://tempmail.noxen.de5.net`
+# 🚀 部署指南
 
-### 体验账号： 
-- 访客用户名：guest
-- 访客密码：123456
+### 推荐部署方式
 
-## 🚀 部署指南
+- 生产环境和长期维护：推荐 **Fork 本仓库 + GitHub Actions 自动部署**，每次更新从上游拉取最新代码后，由 Actions 自动发布到你自己的 Cloudflare 账户。
+- 快速体验与个人使用：可使用下方的 **Cloudflare 一键部署按钮**，在自己的账户下快速创建一个独立实例，适合体验和小规模使用。
 
-### 方案一：Cloudflare 一键部署（推荐）
+> 一键部署创建的 Worker 不会自动跟踪本仓库后续提交。如需持续获得更新，建议 fork 本仓库并使用 GitHub Actions 或本地 wrangler 部署。
+
+### 方案一：Cloudflare 一键部署
 
 [![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/noxenys/temp-mail)
 
@@ -174,49 +182,35 @@ foo123@example.com
 **在 Cloudflare 控制台需要做的事情：**
 
 1. 完成一键部署向导后，进入 Worker 详情页：`Workers & Pages → 你的 Worker → Settings → Variables`。
-2. 在 **Environment Variables / Secrets** 中按下面的最小配置填写：
-   - **运行时必填**（否则无法正常登录或收信）：
-     - `MAIL_DOMAIN`：用于生成临时邮箱的域名列表（如 `example.com` 或 `example.com,domain2.com`）。
-     - `JWT_SECRET`：JWT 会话签名密钥（随机字符串，越长越好）。
-   - **强烈建议配置**：
-     - `ADMIN_PASSWORD`：后台严格管理员登录密码（默认用户名为 `ADMIN_NAME` 或 `admin`）。
-     - `JWT_TOKEN`：根管理员令牌（便于你用脚本/调试工具以超管身份调用 API）。
-   - **可选**（发件、转发、Telegram 等扩展功能）：
-     - `TELEGRAM_BOT_TOKEN`：Telegram Bot Token（用于 Bot 服务）。
-     - `TELEGRAM_CHAT_ID`：接收 Bot 通知的 Chat ID（用于安全校验和通知）。
-     - `RESEND_API_KEY`：Resend 发信 API 密钥。
-     - `FORWARD_RULES`：邮件转发规则配置（JSON或KV格式）。
-     - `GUEST_PASSWORD`：访客访问密码（如需开启访客演示模式）。
-     - `ADMIN_NAME`：自定义管理员用户名（默认为 `admin`）。
+2. 在 **Environment Variables / Secrets** 中添加以下**必需变量**：
+   - `MAIL_DOMAIN`：你的域名（如 `example.com`）。
+   - `JWT_SECRET`：随机生成的密钥字符串。
+   - `ADMIN_PASSWORD`：管理后台密码（强烈建议）。
 
-> ✅ Cloudflare 一键部署 **不需要配置 `D1_DATABASE_ID`**，D1 绑定会由界面或后续脚本自动完成；完整变量说明请参考下文《环境变量配置》章节。
+> 📝 **详细配置说明**：请参考下文 [🛠️ 环境变量配置](#️-环境变量配置) 章节获取完整变量列表（含 Bot、Resend、转发规则等）。
 
-### 方案二：GitHub Actions 自动部署
+> ✅ Cloudflare 一键部署 **不需要配置 `D1_DATABASE_ID`**，D1 绑定会由界面或后续脚本自动完成。
 
-适合希望自动同步更新且隐私隔离的用户。无需按钮授权，所有密钥保存在你自己的 Fork 仓库。
+### 方案二：GitHub Actions 自动部署（推荐生产环境）
 
-**步骤：**
-- Fork 仓库到你的 GitHub 账户
+适合希望自动同步更新且隐私隔离的用户。无需按钮授权，所有密钥保存在你自己的 Fork 仓库，适合作为**生产环境的主力部署方式**。
+
+**基本步骤：**
+- Fork 本仓库到你的 GitHub 账户
 - 在 Fork 仓库 Settings → Secrets and variables → Actions 添加以下 Secrets：
-  - **CI/CD 必填**（用于自动部署）：
+  - **CI/CD 必需**：
     - `CLOUDFLARE_API_TOKEN`：具有 Workers 和 D1 编辑权限的 API 令牌。
     - `CLOUDFLARE_ACCOUNT_ID`：Cloudflare 账户 ID。
-  - **运行时必填**（写入 Worker 环境变量）：
-    - `MAIL_DOMAIN`：用于生成临时邮箱的域名列表（如 `example.com` 或 `example.com,domain2.com`）。
-    - `JWT_SECRET`：JWT 会话签名密钥（随机字符串，越长越好）。
-    - `D1_DATABASE_ID`：在 Cloudflare Dashboard 或通过 Wrangler 创建的 `temp_mail_db` 数据库 ID（创建与获取方式见 `DATABASE_SETUP_GUIDE.md`）。
-  - **强烈建议配置**：
-    - `ADMIN_PASSWORD`：后台严格管理员登录密码（默认用户名为 `ADMIN_NAME` 或 `admin`）。
-    - `JWT_TOKEN`：根管理员令牌（便于你用脚本/调试工具以超管身份调用 API）。
-  - **可选**（发件、转发、Telegram 等扩展功能）：
-    - `TELEGRAM_BOT_TOKEN`：Telegram Bot Token（用于 Bot 服务）。
-    - `TELEGRAM_CHAT_ID`：接收 Bot 通知的 Chat ID（用于安全校验和通知）。
-    - `RESEND_API_KEY`：Resend 发信 API 密钥。
-    - `FORWARD_RULES`：邮件转发规则配置（JSON或KV格式）。
-    - `GUEST_PASSWORD`：访客访问密码（如需开启访客演示模式）。
-    - `ADMIN_NAME`：自定义管理员用户名（默认为 `admin`）。
-- 打开 Actions，选择"Manual Deploy (Workers)"并运行工作流
-- 在按 `DATABASE_SETUP_GUIDE.md` 创建并初始化好 D1 数据库、且配置了 `D1_DATABASE_ID` 之后，GitHub Actions 只负责构建并部署，不会在 CI 中自动创建或重置数据库。如需对远程数据库执行初始化脚本，可在本地运行 `npm run d1:execute-basic:remote`。
+  - **运行时配置**（会自动写入 Worker）：
+    - `MAIL_DOMAIN`：你的域名。
+    - `JWT_SECRET`：随机密钥。
+    - `D1_DATABASE_ID`：你的 D1 数据库 ID。
+    - `ADMIN_PASSWORD`：管理后台密码。
+    - 其他可选变量（`TELEGRAM_BOT_TOKEN`, `RESEND_API_KEY` 等）请参考 [🛠️ 环境变量配置](#️-环境变量配置)。
+- 打开 GitHub 仓库的 Actions 页面，选择 **Deploy to Cloudflare Workers** 工作流并运行，完成首次部署
+- 后续更新流程：
+  - 在本地或 GitHub 上从上游仓库同步最新代码（例如：`git pull upstream main`，再 `git push origin main`）
+  - 每次 push 到你的仓库后，GitHub Actions 会重新构建并部署到你自己的 Cloudflare 账户
 - 在 Cloudflare Email Routing 中添加 catch‑all，并绑定到该 Worker
 
 ### 方案三：本地一键部署
@@ -248,26 +242,373 @@ npm run deploy
 
 > 💡 更详细的本地部署和数据库初始化说明，请参考根目录的 `DEPLOYMENT_GUIDE.md`、`DATABASE_SETUP_GUIDE.md`。
 
-5.  **配置邮件路由**
+## 📧 配置邮件路由（重要）
 
-    为了接收邮件，你需要在 Cloudflare 控制台设置邮件路由：
-    - 进入 Cloudflare Dashboard → Workers & Pages → Email Routing
-    - 添加邮件路由规则，将 `*${MAIL_DOMAIN}` 路由到你的 Worker
-    - 确保域名已正确配置并激活邮件路由
+无论采用哪种部署方式，为了让 Worker 能收到邮件，都**必须**配置 Cloudflare Email Routing：
 
-### 邮件路由配置（必需用于收取真实邮件）
+1. 进入 Cloudflare Dashboard → 选择你的域名 → **Email Routing**。
+2. 启用 Email Routing（如果尚未启用）。
+3. 进入 **Routes** 标签页，点击 **Create rule**。
+4. 创建 **Catch-all address** 规则：
+   - **Action**: `Send to a Worker`
+   - **Destination**: 选择你部署好的 Worker（如 `temp-mail`）
+   - **Status**: `Active`
+   - 点击 **Save**。
 
-如果需要接收真实邮件，需要在 Cloudflare 控制台配置邮件路由：
-
-1. 进入域名的 Email Routing 设置
-2. 添加 Catch-all 规则
-3. 目标设置为 Worker: `temp-mail`
+> ⚠️ 注意：你的 `MAIL_DOMAIN` 环境变量必须与此处配置的域名一致。
 
 ### 设置自定义域名（可选）
 
-在 Worker 设置中添加自定义域名，或使用 workers.dev 子域名。
+在 Worker 设置中添加自定义域名（Triggers → Custom Domains），可以使用更短的 API 域名，而非默认的 `*.workers.dev`。
 
-## 🔄 版本与路线图
+# 🛠️ 环境变量配置
+本项目涉及两类环境变量：
+- **Worker 运行时变量**：在 Cloudflare Workers 上运行服务时必须/可选的配置。
+- **部署辅助变量**：仅在使用 GitHub Actions 等自动化脚本时需要的变量。
+
+### Worker 运行时必需变量
+- `MAIL_DOMAIN`：用于生成临时邮箱的域名，支持多个，使用逗号或空格分隔（如 `example.com, domain2.com`）
+  - 示例：`MAIL_DOMAIN="example.com,domain2.com"`
+  - 用途：前端展示可用域名列表，Worker 根据这些域名接收/生成邮箱地址
+  - 注意：确保已在 Cloudflare Email Routing 中添加 catch-all 规则，并绑定到该 Worker
+- `JWT_SECRET`：JWT 会话签名密钥（必填）
+  - 示例：`JWT_SECRET="your_jwt_secret_key"`
+  - 用途：用于登录会话的签名与校验，影响所有基于 Cookie/JWT 的登录
+- `ADMIN_PASSWORD`：后台访问密码（严格管理员登录，生产环境强烈建议配置）
+  - 示例：`ADMIN_PASSWORD="your_secure_password"`
+  - 用途：管理员账号的登录密码，用于进入管理后台
+
+### Worker 运行时可选变量
+- `JWT_TOKEN`：根管理员令牌（Root Admin Override，可选但推荐配置）
+  - 示例：`JWT_TOKEN="your_root_admin_token"`
+  - 用途：携带该令牌即可直接以最高管理员身份访问受保护接口，便于脚本/调试
+- `GUEST_PASSWORD`：访客登录密码（可选，启用 guest 账号）
+  - 示例：`GUEST_PASSWORD="guest_access_password"`
+  - 用途：为访客账号设置统一密码，用于只读或受限访问
+- `ADMIN_NAME`：严格管理员用户名（默认 `admin`）
+  - 示例：`ADMIN_NAME="myadmin"`
+  - 用途：管理员登录使用的用户名，对应后台的严格管理员
+- `ADMIN_PASS`：与 `ADMIN_PASSWORD` 等价的别名（可选）
+  - 示例：`ADMIN_PASS="your_admin_password"`
+- `RESEND_API_KEY` / `RESEND_TOKEN` / `RESEND`：Resend 发件配置。支持单密钥、多域名键值对、JSON 格式
+  - 用途：启用发件功能，将邮件通过 Resend API 发出
+- `FORWARD_RULES`：邮件转发（转发到指定邮箱）。支持两种格式：`JSON 数组` 或 `逗号分隔 KV`
+  - JSON 格式示例：`FORWARD_RULES='[{"source":"*@example.com","target":"user@gmail.com"}]'`
+  - KV 格式示例：`FORWARD_RULES="*@example.com=user@gmail.com,*@domain.com=user2@gmail.com"`
+  - 用途：将收到的邮件自动转发到你的常用邮箱
+- `TELEGRAM_BOT_TOKEN` / `TELEGRAM_CHAT_ID`：用于启用 Telegram Bot 登录协助与系统告警推送（可选）
+  - 用途：通过 Telegram 接收登录链接、系统异常告警等通知
+- `CACHE_TTL`：本地缓存 TTL 配置（秒，可选）
+  - 示例：`CACHE_TTL="60"`
+  - 用途：控制 Worker 内缓存一些查询结果的时间，降低 D1 访问频率
+
+### 部署辅助变量（CI/CD 用）
+- `D1_DATABASE_ID`：D1 数据库 ID（仅在使用 GitHub Actions 智能部署脚本时必填）
+  - 示例：`D1_DATABASE_ID="your_d1_database_id_here"`
+  - 用途：CI 流水线中自动替换 wrangler.toml 里的占位符，完成数据库绑定
+  - 注意：本地手动部署时可以不设置，由 wrangler 控制台或命令行直接配置 `database_id`
+
+### RESEND_API_KEY / RESEND_TOKEN 多域名配置说明
+
+支持三种配置格式，满足不同场景需求：
+
+1. **单密钥格式**（向后兼容）
+   ```
+   RESEND_API_KEY="re_xxxxxxxxxxxxxxxxxxxxxxxx"
+   ```
+
+2. **键值对格式**（推荐）
+   ```
+   RESEND_API_KEY="domain1.com=re_key1,domain2.com=re_key2"
+   ```
+
+3. **JSON格式**
+   ```
+   RESEND_API_KEY='{"domain1.com":"re_key1","domain2.com":"re_key2"}'
+   ```
+
+**使用说明：**
+- 发送邮件时，系统会根据发件人邮箱域名自动选择对应的API密钥
+- 如果发件人域名未配置对应密钥，发送将失败
+- 批量发送时会自动按域名分组，并行处理以提升效率
+- 单密钥格式兼容旧版配置，可直接升级使用
+
+**配置工作原理：**
+系统在发送邮件时会执行以下步骤：
+1. **提取发件人域名**：从发件人邮箱地址（如 `user@domain1.com`）中提取域名部分（`domain1.com`）
+2. **查找对应密钥**：在配置中查找与该域名匹配的API密钥
+3. **智能选择密钥**：使用匹配的API密钥调用Resend API发送邮件
+4. **批量优化**：批量发送时，系统会自动按域名分组，并行处理以提升效率
+
+# 📁 项目结构
+
+```
+temp-mail/
+├── worker.js                 # 构建后的 Worker 入口（由 build.js 生成）
+├── wrangler.toml             # Cloudflare Workers & D1 配置
+├── package.json              # 项目依赖与脚本
+├── d1-init.sql               # 完整数据库初始化脚本
+├── d1-init-basic.sql         # 基础初始化脚本（仅必要表结构）
+├── deploy-with-env.cjs       # 本地一键部署脚本（npm run deploy）
+├── deploy-github-actions.js  # GitHub Actions 部署脚本
+├── DATABASE_SETUP_GUIDE.md   # 数据库配置指南
+├── DEPLOYMENT_GUIDE.md       # 部署方式说明（本地/GitHub Actions）
+├── GITHUB_ACTIONS_SETUP.md   # GitHub Actions 配置详情
+├── LOGIN_SETUP_GUIDE.md      # 登录系统配置说明
+├── docs/                     # 详细文档
+│   ├── api.md                # API 接口文档
+│   ├── v3.md                 # V3 权限与账户体系说明
+│   ├── resend.md             # Resend 发件配置
+│   ├── monitoring-alerts.md  # 监控与告警指南
+│   └── ...                   # 其他技术说明
+├── src/                      # Worker 源码
+│   ├── server.js             # fetch 入口与路由分发
+│   ├── routes.js             # 路由与页面分发
+│   ├── apiHandlers.js        # API 业务处理
+│   ├── database.js           # D1 访问与表结构初始化
+│   ├── dbConnectionHelper.js # 数据库连接辅助
+│   ├── emailParser.js        # 邮件解析与验证码提取
+│   ├── emailSender.js        # Resend 发件逻辑
+│   ├── telegram.js           # Telegram Bot 集成
+│   ├── cacheHelper.js        # 内存缓存与统计缓存
+│   ├── rateLimit.js          # 速率限制逻辑
+│   ├── logger.js             # 结构化日志
+│   └── commonUtils.js        # 工具函数
+├── public/                   # 静态前端资源
+│   ├── index.html            # 根入口（加载应用界面）
+│   ├── html/                 # HTML 页面
+│   │   ├── app.html          # 主应用界面
+│   │   ├── mailboxes.html    # 邮箱总览页面
+│   │   ├── mailbox.html      # 单邮箱用户页面
+│   │   ├── login.html        # 登录页面
+│   │   ├── admin.html        # 管理后台页面
+│   ├── css/                  # 样式文件
+│   │   ├── app.css           # 主样式
+│   │   ├── app-mobile.css    # 移动端专用样式
+│   │   ├── mailbox.css       # 单邮箱页面样式
+│   │   ├── mailboxes.css     # 邮箱总览样式
+│   │   ├── login.css         # 登录页样式
+│   │   ├── admin.css         # 管理后台样式
+│   ├── js/                   # 客户端脚本
+│   │   ├── app.js            # 首页 + 历史邮箱逻辑
+│   │   ├── app-mobile.js     # 移动端专用逻辑
+│   │   ├── mailbox.js        # 邮箱用户页面逻辑
+│   │   ├── mailboxes.js      # 邮箱总览页面逻辑
+│   │   ├── login.js          # 登录逻辑
+│   │   ├── admin.js          # 管理后台逻辑
+│   │   ├── app-router.js     # 前端路由/加载
+│   │   ├── auth-guard.js     # 认证守卫
+│   │   ├── storage.js        # 本地存储管理
+│   │   └── toast-utils.js    # 提示消息工具
+│   ├── templates/            # HTML 模板片段
+│   │   ├── footer.html       # 页脚模板
+│   │   ├── loading.html      # 加载动画模板
+│   │   ├── loading-inline.html # 内联加载动画
+│   │   └── toast.html        # 提示消息模板
+│   ├── favicon.svg           # 网站图标
+└── ...
+```
+
+# 🗄️ 数据库结构
+
+使用 Cloudflare D1 数据库存储业务数据，核心表结构如下（详见 d1-init.sql）：
+
+- **mailboxes** 表：存储邮箱账户信息
+  - 主要列：`id`, `address`, `local_part`, `domain`, `password_hash`,
+    `created_at`, `last_accessed_at`, `expires_at`, `is_pinned`, `can_login`,
+    `retention_days`
+
+- **messages** 表：存储接收邮件的元数据及 R2 对象位置
+  - 主要列：`id`, `mailbox_id`, `sender`, `to_addrs`, `subject`,
+    `verification_code`, `preview`, `r2_bucket`, `r2_object_key`,
+    `received_at`, `is_read`, `is_pinned`
+
+- **users** 表：登录用户信息
+  - 主要列：`id`, `username`, `password_hash`, `role`, `can_send`,
+    `mailbox_limit`, `created_at`, `telegram_chat_id`, `telegram_username`
+
+- **user_mailboxes** 表：用户与邮箱的绑定关系
+  - 主要列：`user_id`, `mailbox_id`, `is_pinned`, `created_at`
+  - 用于实现“用户级置顶”与配额统计
+
+- **sent_emails** 表：Resend 发件记录
+  - 主要列：`from_addr`, `to_addrs`, `subject`, `status`, `resend_id`,
+    `created_at`, `updated_at`, `scheduled_at`
+
+- **domains** 表：可用域名列表及活跃状态
+
+- **blocked_senders** 表：黑名单规则（按邮箱/域名匹配）
+
+# 🗂️ Wrangler 配置
+
+使用 Wrangler v4 配置：
+
+**D1 数据库绑定**：
+```toml
+[[d1_databases]]
+binding = "temp_mail_db"  # 绑定名称，与代码中保持一致
+database_name = "temp_mail_db"
+database_id = "your-database-id-here"  # 在部署时会被替换
+```
+
+**兼容性日期**：
+```toml
+compatibility_date = "2026-01-11"
+```
+
+# 🗄️ D1 数据库操作
+
+```bash
+# 初始化远程数据库（创建表结构）
+npm run d1:setup
+
+# 执行 SQL 查询（交互模式）
+npm run d1:query
+
+# 执行 SQL 文件
+npx wrangler d1 execute temp_mail_db --remote --file=path/to/file.sql
+
+# 本地开发数据库操作
+npx wrangler d1 execute temp_mail_db --local --file=path/to/file.sql
+
+# 数据库备份
+npx wrangler d1 backup create temp_mail_db
+
+# 查看数据库信息
+npx wrangler d1 info temp_mail_db
+
+# 查看数据库内容
+npx wrangler d1 execute temp_mail_db --local --command="SELECT * FROM mailboxes LIMIT 10"
+
+# 清空测试数据
+npx wrangler d1 execute temp_mail_db --local --command="DELETE FROM messages; DELETE FROM mailboxes;"
+```
+
+# 📋 API 文档
+
+### 根管理员令牌（Root Admin Override）
+
+- 当请求携带与环境变量 `JWT_TOKEN` 相同的令牌时，将被视为最高管理员（strictAdmin），可绕过常规身份验证。
+- 支持三种携带方式（任一即可）：
+  - Authorization 头：`Authorization: Bearer <JWT_TOKEN>`
+  - 自定义头：`X-Admin-Token: <JWT_TOKEN>`
+  - URL 查询参数：`?admin_token=<JWT_TOKEN>`
+- 适用范围：所有 `/api/*` 接口、`/api/session`、`/receive` 以及管理页访问判定。
+
+完整接口说明已迁移至独立文档，包含登录认证、邮箱与邮件、发件（Resend）以及"用户管理"相关接口。
+
+- 查看文档：[`docs/api.md`](docs/api.md)
+
+### 基础接口速览
+- **健康检查**：`GET /api/health`
+- **创建邮箱**：`POST /api/mailbox`
+- **获取邮箱列表**：`GET /api/mailboxes` (Admin)
+- **获取邮件列表**：`GET /api/emails?mailbox=<邮箱>&limit=20`
+- **获取邮件详情**：`GET /api/email/:id`
+- **登录**：`POST /api/login`
+- **获取系统统计**：`GET /api/stats`
+
+# 🛡️ 安全特性
+
+- **代码隔离**：所有用户输入都经过严格验证和转义
+- **环境变量保护**：敏感信息通过环境变量管理，不硬编码在代码中
+- **自动测试**：持续集成包含安全漏洞扫描
+- **权限控制**：严格的访问控制机制，区分普通用户和管理员权限
+- **JWT 认证**：使用 JWT 实现安全的会话管理和跨域认证
+- **输入验证**：对所有用户输入进行严格验证和过滤，防止注入攻击
+- **HTTPS 强制**：强制使用 HTTPS 连接，确保数据传输安全
+
+# 🧪 测试与质量保证
+
+### 运行测试
+
+```bash
+# 安装依赖
+npm install
+
+# 运行单元测试
+npm test
+
+# 代码检查
+npm run lint
+
+# 自动修复可修复的问题
+npm run lint:fix
+
+# 类型检查
+npm run type-check
+
+# 构建项目
+npm run build
+```
+
+目前项目包含以下质量保证措施：
+- **代码检查**：ESLint 配置确保代码风格一致性
+- **类型检查**：TypeScript 类型安全检查
+- **构建验证**：确保代码能够正确打包
+- **覆盖率报告**：支持文本、HTML、LCOV格式的覆盖率报告
+
+# 📊 监控与告警
+
+### 健康检查端点
+
+项目提供健康检查端点，可用于监控服务状态：
+
+```bash
+# 健康检查
+curl -X GET https://your-worker.workers.dev/api/health
+
+# 响应示例
+{
+  "status": "healthy",
+  "timestamp": "2026-01-11T00:00:00Z",
+  "version": "v5.0",
+  "database": "connected",
+  "r2": "connected"
+}
+```
+
+### 告警配置
+
+参考 `docs/monitoring-alerts.md` 配置监控告警：
+- **错误率告警**：当错误率超过阈值时触发
+- **响应时间告警**：当平均响应时间异常时触发
+- **资源使用告警**：监控数据库和存储使用情况
+- **自定义告警**：根据业务需求配置自定义告警规则
+
+# 🔄 CI/CD 自动化
+
+项目配置了 GitHub Actions CI/CD 流水线，实现一键自动化部署：
+### 部署流程
+
+1. **代码检查**：ESLint 代码质量检查
+2. **类型检查**：TypeScript 类型安全检查
+3. **构建验证**：确保项目能正确构建
+4. **一键部署**：自动部署到 Cloudflare Workers，包含数据库创建和初始化
+
+### 触发方式
+
+- **自动触发**：推送代码到 `main` 分支时自动部署
+- **手动触发**：在 GitHub Actions 页面手动运行部署工作流
+
+### 数据库与存储配置
+
+- 数据库名称为 `temp_mail_db`，绑定名为 `temp_mail_db`
+- R2存储桶名称为 `temp-mail-eml`，绑定名为 `MAIL_EML`
+- 智能部署脚本会自动处理数据库创建和环境变量配置
+
+# ❓ 常见问题
+
+**Error 1101（Worker threw exception）**：
+- 检查 `server.js` 是否已显式 `import logger`
+- 检查 `wrangler.toml` 的 `[[d1_databases]]` 是否为 `binding = "temp_mail_db"` 且 `database_id` 已注入
+- 确认已执行 `d1-init-basic.sql`
+- 未配置 `RESEND_API_KEY` 的路由会返回 501（预期）而不是抛异常
+
+**本地/线上环境差异**：
+- 如使用 `${D1_DATABASE_ID}` 占位，需在 CI 或本地 shell 注入该变量
+
+# 🔄 版本与路线图
 
 ### V1
 - 前后端基础功能与认证体系
@@ -354,527 +695,17 @@ npm run deploy
 - [ ] **数据洞察**：构建可视化仪表盘，实时展示系统吞吐、活跃度与健康状态
 - [ ] **邮件互联**：支持灵活的自动转发规则，实现与其他邮箱服务的无缝流转
 
-## 🔧 配置与部署
-
-### 快速部署
-
-1. 点击上方 "Deploy to Cloudflare Workers" 按钮
-2. 登录 Cloudflare 账户
-3. 配置环境变量
-4. 完成部署
-
-## 🛠️ 环境变量配置
-本项目涉及两类环境变量：
-- **Worker 运行时变量**：在 Cloudflare Workers 上运行服务时必须/可选的配置。
-- **部署辅助变量**：仅在使用 GitHub Actions 等自动化脚本时需要的变量。
-
-### Worker 运行时必需变量
-- `MAIL_DOMAIN`：用于生成临时邮箱的域名，支持多个，使用逗号或空格分隔（如 `example.com, domain2.com`）
-  - 示例：`MAIL_DOMAIN="example.com,domain2.com"`
-  - 用途：前端展示可用域名列表，Worker 根据这些域名接收/生成邮箱地址
-  - 注意：确保已在 Cloudflare Email Routing 中添加 catch-all 规则，并绑定到该 Worker
-- `JWT_SECRET`：JWT 会话签名密钥（必填）
-  - 示例：`JWT_SECRET="your_jwt_secret_key"`
-  - 用途：用于登录会话的签名与校验，影响所有基于 Cookie/JWT 的登录
-- `ADMIN_PASSWORD`：后台访问密码（严格管理员登录，生产环境强烈建议配置）
-  - 示例：`ADMIN_PASSWORD="your_secure_password"`
-  - 用途：管理员账号的登录密码，用于进入管理后台
-
-### Worker 运行时可选变量
-- `JWT_TOKEN`：根管理员令牌（Root Admin Override，可选但推荐配置）
-  - 示例：`JWT_TOKEN="your_root_admin_token"`
-  - 用途：携带该令牌即可直接以最高管理员身份访问受保护接口，便于脚本/调试
-- `GUEST_PASSWORD`：访客登录密码（可选，启用 guest 账号）
-  - 示例：`GUEST_PASSWORD="guest_access_password"`
-  - 用途：为访客账号设置统一密码，用于只读或受限访问
-- `ADMIN_NAME`：严格管理员用户名（默认 `admin`）
-  - 示例：`ADMIN_NAME="myadmin"`
-  - 用途：管理员登录使用的用户名，对应后台的严格管理员
-- `ADMIN_PASS`：与 `ADMIN_PASSWORD` 等价的别名（可选）
-  - 示例：`ADMIN_PASS="your_admin_password"`
-- `RESEND_API_KEY` / `RESEND_TOKEN` / `RESEND`：Resend 发件配置。支持单密钥、多域名键值对、JSON 格式
-  - 用途：启用发件功能，将邮件通过 Resend API 发出
-- `FORWARD_RULES`：邮件转发（转发到指定邮箱）。支持两种格式：`JSON 数组` 或 `逗号分隔 KV`
-  - JSON 格式示例：`FORWARD_RULES='[{"source":"*@example.com","target":"user@gmail.com"}]'`
-  - KV 格式示例：`FORWARD_RULES="*@example.com=user@gmail.com,*@domain.com=user2@gmail.com"`
-  - 用途：将收到的邮件自动转发到你的常用邮箱
-- `TELEGRAM_BOT_TOKEN` / `TELEGRAM_CHAT_ID`：用于启用 Telegram Bot 登录协助与系统告警推送（可选）
-  - 用途：通过 Telegram 接收登录链接、系统异常告警等通知
-- `CACHE_TTL`：本地缓存 TTL 配置（秒，可选）
-  - 示例：`CACHE_TTL="60"`
-  - 用途：控制 Worker 内缓存一些查询结果的时间，降低 D1 访问频率
-
-### 部署辅助变量（CI/CD 用）
-- `D1_DATABASE_ID`：D1 数据库 ID（仅在使用 GitHub Actions 智能部署脚本时必填）
-  - 示例：`D1_DATABASE_ID="your_d1_database_id_here"`
-  - 用途：CI 流水线中自动替换 wrangler.toml 里的占位符，完成数据库绑定
-  - 注意：本地手动部署时可以不设置，由 wrangler 控制台或命令行直接配置 `database_id`
-
-### RESEND_API_KEY / RESEND_TOKEN 多域名配置说明
-
-支持三种配置格式，满足不同场景需求：
-
-1. **单密钥格式**（向后兼容）
-   ```
-   RESEND_API_KEY="re_xxxxxxxxxxxxxxxxxxxxxxxx"
-   ```
-
-2. **键值对格式**（推荐）
-   ```
-   RESEND_API_KEY="domain1.com=re_key1,domain2.com=re_key2"
-   ```
-
-3. **JSON格式**
-   ```
-   RESEND_API_KEY='{"domain1.com":"re_key1","domain2.com":"re_key2"}'
-   ```
-
-**使用说明：**
-- 发送邮件时，系统会根据发件人邮箱域名自动选择对应的API密钥
-- 如果发件人域名未配置对应密钥，发送将失败
-- 批量发送时会自动按域名分组，并行处理以提升效率
-- 单密钥格式兼容旧版配置，可直接升级使用
-
-**配置工作原理：**
-系统在发送邮件时会执行以下步骤：
-1. **提取发件人域名**：从发件人邮箱地址（如 `user@domain1.com`）中提取域名部分（`domain1.com`）
-2. **查找对应密钥**：在配置中查找与该域名匹配的API密钥
-3. **智能选择密钥**：使用匹配的API密钥调用Resend API发送邮件
-4. **批量优化**：批量发送时，系统会自动按域名分组，并行处理以提升效率
-
-## 📋 API 文档
-### 根管理员令牌（Root Admin Override）
-
-- 当请求携带与环境变量 `JWT_TOKEN` 相同的令牌时，将被视为最高管理员（strictAdmin），可绕过常规身份验证。
-- 支持三种携带方式（任一即可）：
-  - Authorization 头：`Authorization: Bearer <JWT_TOKEN>`
-  - 自定义头：`X-Admin-Token: <JWT_TOKEN>`
-  - URL 查询参数：`?admin_token=<JWT_TOKEN>`
-- 适用范围：所有 `/api/*` 接口、`/api/session`、`/receive` 以及管理页访问判定。
-
-完整接口说明已迁移至独立文档，包含登录认证、邮箱与邮件、发件（Resend）以及"用户管理"相关接口。
-
-- 查看文档：[`docs/api.md`](docs/api.md)
-
-详见《[V3 版本更新日志](docs/v3.md)》。
-
-## 📁 项目结构
-
-```
-temp-mail/
-├── worker.js                 # 构建后的 Worker 入口（由 build.js 生成）
-├── wrangler.toml             # Cloudflare Workers & D1 配置
-├── package.json              # 项目依赖与脚本
-├── d1-init.sql               # 完整数据库初始化脚本
-├── d1-init-basic.sql         # 基础初始化脚本（仅必要表结构）
-├── deploy-with-env.cjs       # 本地一键部署脚本（npm run deploy）
-├── deploy-github-actions.js  # GitHub Actions 部署脚本
-├── DATABASE_SETUP_GUIDE.md   # 数据库配置指南
-├── DEPLOYMENT_GUIDE.md       # 部署方式说明（本地/GitHub Actions）
-├── GITHUB_ACTIONS_SETUP.md   # GitHub Actions 配置详情
-├── LOGIN_SETUP_GUIDE.md      # 登录系统配置说明
-├── docs/                     # 详细文档
-│   ├── api.md                # API 接口文档
-│   ├── v3.md                 # V3 权限与账户体系说明
-│   ├── resend.md             # Resend 发件配置
-│   ├── monitoring-alerts.md  # 监控与告警指南
-│   └── ...                   # 其他技术说明
-├── src/                      # Worker 源码
-│   ├── server.js             # fetch 入口与路由分发
-│   ├── routes.js             # 路由与页面分发
-│   ├── apiHandlers.js        # API 业务处理
-│   ├── database.js           # D1 访问与表结构初始化
-│   ├── dbConnectionHelper.js # 数据库连接辅助
-│   ├── emailParser.js        # 邮件解析与验证码提取
-│   ├── emailSender.js        # Resend 发件逻辑
-│   ├── telegram.js           # Telegram Bot 集成
-│   ├── cacheHelper.js        # 内存缓存与统计缓存
-│   ├── rateLimit.js          # 速率限制逻辑
-│   ├── logger.js             # 结构化日志
-│   └── commonUtils.js        # 工具函数
-├── public/                   # 静态前端资源
-│   ├── index.html            # 根入口（加载应用界面）
-│   ├── html/                 # HTML 页面
-│   │   ├── app.html          # 主应用界面
-│   │   ├── mailboxes.html    # 邮箱总览页面
-│   │   ├── mailbox.html      # 单邮箱用户页面
-│   │   ├── login.html        # 登录页面
-│   │   └── admin.html        # 管理后台页面
-│   ├── css/                  # 样式文件
-│   │   ├── app.css           # 主样式
-│   │   ├── app-mobile.css    # 移动端专用样式
-│   │   ├── mailbox.css       # 单邮箱页面样式
-│   │   ├── mailboxes.css     # 邮箱总览样式
-│   │   ├── login.css         # 登录页样式
-│   │   └── admin.css         # 管理后台样式
-│   ├── js/                   # 客户端脚本
-│   │   ├── app.js            # 首页 + 历史邮箱逻辑
-│   │   ├── app-mobile.js     # 移动端专用逻辑
-│   │   ├── mailbox.js        # 邮箱用户页面逻辑
-│   │   ├── mailboxes.js      # 邮箱总览页面逻辑
-│   │   ├── login.js          # 登录逻辑
-│   │   ├── admin.js          # 管理后台逻辑
-│   │   ├── app-router.js     # 前端路由/加载
-│   │   ├── auth-guard.js     # 认证守卫
-│   │   ├── storage.js        # 本地存储管理
-│   │   └── toast-utils.js    # 提示消息工具
-│   ├── templates/            # HTML 模板片段
-│   │   ├── footer.html       # 页脚模板
-│   │   ├── loading.html      # 加载动画模板
-│   │   ├── loading-inline.html # 内联加载动画
-│   │   └── toast.html        # 提示消息模板
-│   ├── favicon.svg           # 网站图标
-└── ...
-```
-
-## 🗄️ 数据库结构
-
-使用 Cloudflare D1 数据库存储业务数据，核心表结构如下（详见 d1-init.sql）：
-
-- **mailboxes** 表：存储邮箱账户信息
-  - 主要列：`id`, `address`, `local_part`, `domain`, `password_hash`,
-    `created_at`, `last_accessed_at`, `expires_at`, `is_pinned`, `can_login`,
-    `retention_days`
-
-- **messages** 表：存储接收邮件的元数据及 R2 对象位置
-  - 主要列：`id`, `mailbox_id`, `sender`, `to_addrs`, `subject`,
-    `verification_code`, `preview`, `r2_bucket`, `r2_object_key`,
-    `received_at`, `is_read`, `is_pinned`
-
-- **users** 表：登录用户信息
-  - 主要列：`id`, `username`, `password_hash`, `role`, `can_send`,
-    `mailbox_limit`, `created_at`, `telegram_chat_id`, `telegram_username`
-
-- **user_mailboxes** 表：用户与邮箱的绑定关系
-  - 主要列：`user_id`, `mailbox_id`, `is_pinned`, `created_at`
-  - 用于实现“用户级置顶”与配额统计
-
-- **sent_emails** 表：Resend 发件记录
-  - 主要列：`from_addr`, `to_addrs`, `subject`, `status`, `resend_id`,
-    `created_at`, `updated_at`, `scheduled_at`
-
-- **domains** 表：可用域名列表及活跃状态
-
-- **blocked_senders** 表：黑名单规则（按邮箱/域名匹配）
-
-## 🗂️ Wrangler 配置
-
-使用 Wrangler v4 配置：
-
-**D1 数据库绑定**：
-```toml
-[[d1_databases]]
-binding = "temp_mail_db"  # 绑定名称，与代码中保持一致
-database_name = "temp_mail_db"
-database_id = "your-database-id-here"  # 在部署时会被替换
-```
-
-**兼容性日期**：
-```toml
-compatibility_date = "2026-01-11"
-```
-
-## 🔐 环境变量
-
-> 下表是对常用环境变量的快速总览，包含【必填/可选】标记和用途。
-
-- `MAIL_DOMAIN` 【必填】用于生成临时邮箱的域名列表
-- `JWT_SECRET` 【必填】JWT 会话密钥，用于登录状态签名与校验
-- `ADMIN_PASSWORD` 【强烈建议配置】管理员密码，不配置时仅适合本地演示
-- `JWT_TOKEN` 【可选】根管理员令牌，便于脚本/自动化以超管身份调用 API
-- `RESEND_API_KEY` / `RESEND_TOKEN` / `RESEND` 【可选】Resend 发件密钥，用于开启发件功能
-- `FORWARD_RULES` 【可选】邮件自动转发规则
-- `GUEST_PASSWORD` 【可选】访客登录密码，用于开启受限 guest 访问
-- `ADMIN_NAME` / `ADMIN_USERNAME` 【可选】严格管理员用户名（默认 `admin`）
-- `ADMIN_PASS` 【可选】`ADMIN_PASSWORD` 的别名
-- `CACHE_TTL` 【可选】本地缓存 TTL 配置（秒），降低数据库压力
-- `MAX_EMAIL_SIZE` 【可选】最大邮件大小限制（超过将被拒收或丢弃）
-- `EMAIL_RETENTION_DAYS` 【可选】邮件保留天数，控制清理策略
-- `TELEGRAM_BOT_TOKEN` / `TELEGRAM_CHAT_ID` 【可选】Telegram Bot 告警与登录辅助配置
-- `D1_DATABASE_ID` 【仅 CI/CD 使用】D1 数据库 ID，供 GitHub Actions 等部署脚本注入
-
-## 🧪 测试与质量保证
-
-### 运行测试
-
-```bash
-# 安装依赖
-npm install
-
-# 运行单元测试
-npm test
-
-# 代码检查
-npm run lint
-
-# 类型检查
-npm run type-check
-
-# 构建项目
-npm run build
-```
-
-目前项目包含以下质量保证措施：
-- **代码检查**：ESLint 配置确保代码风格一致性
-- **类型检查**：TypeScript 类型安全检查
-- **构建验证**：确保代码能够正确打包
-
-## 🔍 代码质量
-
-```bash
-# 代码检查
-npm run lint
-
-# 自动修复可修复的问题
-npm run lint:fix
-
-# 类型检查
-npm run type-check
-
-# 构建项目
-npm run build
-```
-
-## 🗄️ D1 数据库操作
-
-```bash
-# 初始化远程数据库（创建表结构）
-npm run d1:setup
-
-# 执行 SQL 查询（交互模式）
-npm run d1:query
-
-# 执行 SQL 文件
-npx wrangler d1 execute temp_mail_db --remote --file=path/to/file.sql
-
-# 本地开发数据库操作
-npx wrangler d1 execute temp_mail_db --local --file=path/to/file.sql
-
-# 数据库备份
-npx wrangler d1 backup create temp_mail_db
-
-# 查看数据库信息
-npx wrangler d1 info temp_mail_db
-
-# 查看数据库内容
-npx wrangler d1 execute temp_mail_db --local --command="SELECT * FROM mailboxes LIMIT 10"
-
-# 清空测试数据
-npx wrangler d1 execute temp_mail_db --local --command="DELETE FROM messages; DELETE FROM mailboxes;"
-```
-
-## 📄 API 接口
-
-### 基础接口
-- **健康检查**：`GET /api/health`
-  - 返回服务状态信息
-  - 包含版本号、数据库连接状态等
-
-### 邮箱相关
-- **创建邮箱**：`POST /api/mailbox`
-  - 请求体：`{ "address": "user@domain.com" }`
-  - 返回邮箱信息和访问令牌
-- **获取邮箱列表**：`GET /api/mailboxes`
-  - 需要管理员权限
-- **删除邮箱**：`DELETE /api/mailbox/:id`
-  - 需要管理员权限或邮箱拥有者
-
-### 邮件相关
-- **获取邮件列表**：`GET /api/emails?mailbox=<邮箱地址>&limit=20&page=1`
-  - 获取指定邮箱的邮件列表
-  - 支持分页查询
-- **获取邮件详情**：`GET /api/email/:id`
-  - 获取单封邮件的详细内容
-- **删除邮件**：`DELETE /api/email/:id`
-  - 删除指定邮件
-
-### 认证相关
-- **登录**：`POST /api/login`
-  - 验证邮箱和密码
-  - 返回访问令牌
-- **验证令牌**：`GET /api/auth/verify`
-  - 验证JWT令牌有效性
-
-### 系统接口
-- **获取系统统计**：`GET /api/stats`
-  - 返回邮箱总数、邮件总数等统计信息
-- **获取配置信息**：`GET /api/config`
-  - 返回系统配置信息
-
-### 用户管理（管理后台）
-- **获取用户列表**：`GET /api/users`
-  - 分页获取所有用户信息（含角色、配额、是否允许发件等）
-- **获取用户邮箱列表**：`GET /api/users/{userId}/mailboxes`
-  - 获取指定用户下的邮箱列表
-- **创建用户**：`POST /api/users`
-  - 创建普通用户或管理员用户
-- **更新用户**：`PATCH /api/users/{userId}`
-  - 支持改名、改密码、切换角色、调整邮箱上限、发件权限
-- **删除用户**：`DELETE /api/users/{userId}`
-  - 删除指定用户及其邮箱绑定关系
-- **分配邮箱**：`POST /api/users/assign`
-  - 为用户分配已有邮箱或批量导入邮箱地址
-
-## 🛡️ 安全特性
-
-- **代码隔离**：所有用户输入都经过严格验证和转义
-- **环境变量保护**：敏感信息通过环境变量管理，不硬编码在代码中
-- **自动测试**：持续集成包含安全漏洞扫描
-- **权限控制**：严格的访问控制机制，区分普通用户和管理员权限
-- **JWT 认证**：使用 JWT 实现安全的会话管理和跨域认证
-- **输入验证**：对所有用户输入进行严格验证和过滤，防止注入攻击
-- **HTTPS 强制**：强制使用 HTTPS 连接，确保数据传输安全
-
-## 🧪 测试与质量保证
-
-### 测试覆盖范围
-
-- **单元测试**：核心工具函数（随机ID生成、邮箱验证、时间格式化等）
-- **集成测试**：认证功能（JWT令牌、密码哈希等）
-- **模拟环境**：Cloudflare Workers 运行时环境模拟
-- **覆盖率报告**：支持文本、HTML、LCOV格式的覆盖率报告
-
-### 测试配置
-
-- **测试框架**：Vitest（快速、轻量级的测试运行器）
-- **代码检查**：ESLint（代码质量检查）
-- **类型检查**：TypeScript（类型安全）
-- **覆盖率**：@vitest/coverage-v8（覆盖率统计）
-
-## 📈 监控与告警
-
-### 健康检查端点
-
-项目提供健康检查端点，可用于监控服务状态：
-
-```bash
-# 健康检查
-curl -X GET https://your-worker.workers.dev/api/health
-
-# 响应示例
-{
-  "status": "healthy",
-  "timestamp": "2026-01-11T00:00:00Z",
-  "version": "v5.0",
-  "database": "connected",
-  "r2": "connected"
-}
-```
-
-### 告警配置
-
-参考 `docs/monitoring-alerts.md` 配置监控告警：
-
-- **错误率告警**：当错误率超过阈值时触发
-- **响应时间告警**：当平均响应时间异常时触发
-- **资源使用告警**：监控数据库和存储使用情况
-- **自定义告警**：根据业务需求配置自定义告警规则
-
-### 性能优化监控
-
-- **缓存命中率**：监控缓存系统性能
-- **数据库查询性能**：监控D1数据库查询效率
-- **R2存储性能**：监控对象存储读写性能
-- **内存使用**：监控Worker内存使用情况
-
-## 🔄 CI/CD 自动化
-
-项目配置了 GitHub Actions CI/CD 流水线，实现一键自动化部署：
-### 部署流程
-
-1. **代码检查**：ESLint 代码质量检查
-2. **类型检查**：TypeScript 类型安全检查
-3. **构建验证**：确保项目能正确构建
-4. **一键部署**：自动部署到 Cloudflare Workers，包含数据库创建和初始化
-
-### 触发方式
-
-- **自动触发**：推送代码到 `main` 分支时自动部署
-- **手动触发**：在 GitHub Actions 页面手动运行部署工作流
-
-### 数据库与存储配置
-
-- 数据库名称为 `temp_mail_db`，绑定名为 `temp_mail_db`
-- R2存储桶名称为 `temp-mail-eml`，绑定名为 `MAIL_EML`
-- 智能部署脚本会自动处理数据库创建和环境变量配置
-
-
-
-## 🚀 快速开始（Quick Start）
-
-**环境要求**：Node.js 20+
-
-```bash
-# 安装依赖
-npm install
-
-# 本地开发（默认端口 8787）
-npm run dev
-```
-
-**邮箱访问路径**：
-- 首页：`/`
-- 邮箱管理：`/html/mailbox.html`
-
-## ⚙️ 配置（Configuration）
-
-**D1 数据库配置**：
-- 绑定名：`temp_mail_db`（与 wrangler.toml 一致）
-
-**环境变量配置**：
-使用 `wrangler secret put` 命令注入以下环境变量：
-- `JWT_TOKEN`
-- `RESEND_API_KEY` 
-- `ADMIN_PASSWORD`
-
-**wrangler.toml 配置**：
-```toml
-compatibility_date = "2026-01-11"
-database_id = "${D1_DATABASE_ID}"  # 需由 CI/本地环境提供
-```
-
-## 🚀 部署（Deploy）
-
-**数据库初始化**：
-```bash
-# 创建 D1 数据库
-npx wrangler d1 create temp_mail_db
-
-# 执行基础初始化脚本
-npx wrangler d1 execute temp_mail_db --remote --file=d1-init-basic.sql
-```
-
-**部署命令**：
-```bash
-# 预检后部署（推荐）
-npm run deploy:checked
-
-# 直接部署（保留原有逻辑）
-npm run deploy
-```
-
-## ❓ 常见问题（Troubleshooting）
-
-**Error 1101（Worker threw exception）**：
-- 检查 `server.js` 是否已显式 `import logger`
-- 检查 `wrangler.toml` 的 `[[d1_databases]]` 是否为 `binding = "temp_mail_db"` 且 `database_id` 已注入
-- 确认已执行 `d1-init-basic.sql`
-- 未配置 `RESEND_API_KEY` 的路由会返回 501（预期）而不是抛异常
-
-**本地/线上环境差异**：
-- 如使用 `${D1_DATABASE_ID}` 占位，需在 CI 或本地 shell 注入该变量
-
-## 🤝 贡献
+# 🤝 贡献
 
 欢迎提交 Issue 和 Pull Request 来改进项目！
 
-## 📄 许可证
+# 📄 许可证
 
 本项目采用 Apache License 2.0 许可证 - 详见 [LICENSE](./LICENSE) 文件。
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-## 🆘 支持
+# 🆘 支持
 
 如遇到问题，请：
 
