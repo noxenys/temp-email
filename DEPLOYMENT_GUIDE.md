@@ -58,11 +58,10 @@ npm run deploy
 
 ## 📋 部署流程说明
 
-### 一键部署功能
-- **自动创建 D1 数据库**（如果不存在）
-- **自动初始化数据库表结构**
-- **自动部署 Worker 代码**
-- **自动运行测试和代码检查**
+### 一键部署功能概览
+- 使用 GitHub Actions 工作流，将代码自动部署到 Cloudflare Workers（不包含数据库创建和测试步骤）。
+- 使用本地脚本 `npm run deploy` 时，会结合仓库内的 D1 初始化脚本，自动创建并初始化 `temp_mail_db` 数据库，并更新 `wrangler.toml` 中的数据库绑定配置。
+- 测试与代码检查可通过本地运行 `npm run test`、`npm run lint` 等脚本完成，当前默认工作流未内置自动测试步骤。
 
 ### 部署后验证
 1. 访问你的 Worker 域名：`https://你的worker域名.workers.dev`

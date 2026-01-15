@@ -82,16 +82,10 @@
 已通过以下文件支持环境变量配置：
 
 ### 1. GitHub Actions 工作流文件
-- 在 `.github/workflows/ci.yml` 中添加了 `ADMIN_PASSWORD`, `JWT_SECRET`, `JWT_TOKEN`, `MAIL_DOMAIN`, `D1_DATABASE_ID` 等环境变量传递
+- `.github/workflows/ci.yml` 会把 `ADMIN_PASSWORD`, `JWT_SECRET`, `JWT_TOKEN`, `MAIL_DOMAIN`, `D1_DATABASE_ID` 等 Secrets 作为环境变量传递给部署步骤
 
 ### 2. 部署脚本
-- `deploy-github-actions.js`：从 GitHub Secrets 读取必要环境变量并设置到 Worker
-
-### 部署脚本现在会自动：
-1. 检查并创建D1数据库
-2. 初始化数据库表结构
-3. 设置必要的环境变量（如果提供了）
-4. 部署到Cloudflare Workers
+- `deploy-github-actions.js`：在 GitHub Actions 中读取这些环境变量，将它们写入 Worker 的 Secrets，并根据 `D1_DATABASE_ID` 更新 `wrangler.toml` 中的 D1 绑定，最后构建并部署到 Cloudflare Workers。它本身不会在 CI 内创建或初始化 D1 数据库，数据库需要按 `DATABASE_SETUP_GUIDE.md` 事先创建并初始化，或通过本地脚本（如 `npm run deploy`、`npm run d1:execute-basic:remote`）完成。
 
 ## ⚠️ 注意事项
 
