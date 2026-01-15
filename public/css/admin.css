@@ -2,17 +2,31 @@
    管理页面 - 现代化布局设计
    =========================================== */
 
-/* 顶部导航栏按钮样式 */
+/* 顶部导航栏按钮样式 - 增强对比度 */
 .topbar .btn {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-color: #cbd5e1; /* 增强边框对比度 */
+  color: #0f172a; /* 确保文字深色 */
 }
 
 .topbar .btn:hover {
   transform: translateY(-1px);
+  border-color: #94a3b8;
+  background: #f8fafc;
+}
+
+.topbar .btn-secondary {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+.topbar .btn-secondary:hover {
+  background: #e2e8f0;
+  border-color: #94a3b8;
 }
 
 /* 主容器 - 响应式网格布局 */
@@ -329,10 +343,47 @@
 }
 
 .mailbox-content .time {
-  color: #64748b;
+  color: var(--text-subtle);
   font-size: 11px;
   font-weight: 500;
 }
+
+/* Telegram 状态详情网格 */
+.telegram-info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px 16px;
+  margin-top: 12px;
+  font-size: 13px;
+}
+
+.telegram-info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.telegram-info-item.full-width {
+  grid-column: 1 / -1;
+}
+
+.telegram-info-label {
+  font-size: 11px;
+  color: var(--text-subtle);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.telegram-info-value {
+  color: #1e293b;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  word-break: break-all;
+}
+
+.telegram-info-value.status-ok { color: #16a34a; }
+.telegram-info-value.status-error { color: #dc2626; }
+
 
 /* 邮箱操作按钮区域 */
 .mailbox-actions {

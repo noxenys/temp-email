@@ -59,9 +59,10 @@ npm run deploy
 ## 📋 部署流程说明
 
 ### 一键部署功能概览
-- 使用 GitHub Actions 工作流，将代码自动部署到 Cloudflare Workers（不包含数据库创建和测试步骤）。
+- 使用 GitHub Actions 工作流，将代码自动部署到 Cloudflare Workers（不包含数据库创建和自动测试步骤）。
 - 使用本地脚本 `npm run deploy` 时，会结合仓库内的 D1 初始化脚本，自动创建并初始化 `temp_mail_db` 数据库，并更新 `wrangler.toml` 中的数据库绑定配置。
-- 测试与代码检查可通过本地运行 `npm run test`、`npm run lint` 等脚本完成，当前默认工作流未内置自动测试步骤。
+- 测试与代码检查可通过本地运行 `npm run test`、`npm run lint` 等脚本完成；当前默认工作流仅构建并部署，不会自动执行 Vitest 测试。
+ - 注意：如果你选择“Fork + GitHub Actions 自动部署”这一路径，请将 Worker 运行时所需的环境变量统一配置在 GitHub Secrets 中，不要再在 Cloudflare 控制台为同一个 Worker 手动填写同名变量。因为每次 Actions 重新拉取代码并部署时，工作流会按 Secrets 再次写入变量，从而覆盖你在 Cloudflare 控制台中手动添加/修改的值。
 
 ### 部署后验证
 1. 访问你的 Worker 域名：`https://你的worker域名.workers.dev`

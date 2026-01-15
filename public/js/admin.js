@@ -44,9 +44,16 @@ const els = {
   nextPage: document.getElementById('next-page'),
   toast: document.getElementById('toast'),
   telegramStatusBadge: document.getElementById('telegram-status-badge'),
-  telegramStatusText: document.getElementById('telegram-status-text'),
-  telegramStatusExtra: document.getElementById('telegram-status-extra'),
   telegramStatusRefresh: document.getElementById('telegram-status-refresh'),
+  telegramStatusLoading: document.getElementById('telegram-status-loading'),
+  telegramStatusContent: document.getElementById('telegram-status-content'),
+  tgBotName: document.getElementById('tg-bot-name'),
+  tgBotId: document.getElementById('tg-bot-id'),
+  tgBotUsername: document.getElementById('tg-bot-username'),
+  tgChatId: document.getElementById('tg-chat-id'),
+  tgToken: document.getElementById('tg-token'),
+  tgWebhook: document.getElementById('tg-webhook'),
+  tgExtra: document.getElementById('tg-extra'),
   
   // 检查必要的DOM元素是否存在
   checkRequiredElements() {
@@ -566,54 +573,78 @@ function setTelegramStatusBadge(state) {
 }
 
 async function loadTelegramStatus() {
-  if (!els.telegramStatusText) return;
+  if (!els.telegramStatusContent) return;
+  
   try {
     setTelegramStatusBadge('checking');
-    els.telegramStatusText.textContent = '正在检查 Telegram Webhook…';
-    if (els.telegramStatusExtra) els.telegramStatusExtra.textContent = '';
+    if (els.telegramStatusLoading) els.telegramStatusLoading.style.display = 'block';
+    if (els.telegramStatusContent) els.telegramStatusContent.style.display = 'none';
+    
     const r = await api('/api/telegram/status');
     const data = await r.json();
+    
+    if (els.telegramStatusLoading) els.telegramStatusLoading.style.display = 'none';
+    if (els.telegramStatusContent) els.telegramStatusContent.style.display = 'grid';
+    
     if (!data || data.enabled === false) {
       setTelegramStatusBadge('disabled');
-      els.telegramStatusText.textContent = '未配置 Telegram Bot，已跳过 Webhook 检查。';
-      if (els.telegramStatusExtra) {
-        const reason = data && data.reason ? String(data.reason) : '';
-        els.telegramStatusExtra.textContent = reason || '请在 Cloudflare 环境变量中配置 TELEGRAM_BOT_TOKEN。';
-      }
+      if (els.tgExtra) els.tgExtra.textContent = '未配置 Telegram Bot (TELEGRAM_BOT_TOKEN)';
+      // Clear other fields
+      [els.tgBotName, els.tgBotId, els.tgBotUsername, els.tgChatId, els.tgToken, els.tgWebhook].forEach(el => {
+        if (el) el.textContent = '-';
+      });
       return;
     }
+    
+    // Fill Bot Info
+    if (els.tgBotName) els.tgBotName.textContent = data.botInfo?.first_name || '-';
+    if (els.tgBotId) els.tgBotId.textContent = data.botInfo?.id || '-';
+    if (els.tgBotUsername) els.tgBotUsername.textContent = data.botInfo?.username ? '@' + data.botInfo.username : '-';
+    if (els.tgChatId) els.tgChatId.textContent = data.chatId || '-';
+    if (els.tgToken) els.tgToken.textContent = data.tokenMasked || '******';
+    
+    // Webhook URL
+    if (els.tgWebhook) els.tgWebhook.textContent = data.url || '未设置';
+    
+    // Status & Extra Info
+    const pending = Number(data.pendingUpdateCount || 0);
+    const parts = [];
+    if (pending > 0) parts.push(`待处理更新: ${pending}`);
+    
     if (data.ok) {
       setTelegramStatusBadge('ok');
-      const url = String(data.url || '');
-      els.telegramStatusText.textContent = 'Telegram Webhook 已连接。';
-      if (els.telegramStatusExtra) {
-        const pending = Number(data.pendingUpdateCount || 0);
-        const parts = [];
-        if (url) parts.push('当前 Webhook: ' + url);
-        parts.push('待处理更新数: ' + pending);
-        els.telegramStatusExtra.textContent = parts.join(' ｜ ');
+      parts.push('Webhook 正常工作');
+      if (els.tgExtra) {
+        els.tgExtra.className = 'telegram-info-value status-ok';
       }
     } else {
       const hasError = !!data.lastErrorDate || !!data.error;
       setTelegramStatusBadge(hasError ? 'error' : 'warn');
-      els.telegramStatusText.textContent = hasError ? 'Telegram Webhook 异常。' : 'Telegram Webhook 状态未知。';
-      if (els.telegramStatusExtra) {
-        const pieces = [];
-        const errMsg = data.lastErrorMessage || data.error;
-        if (errMsg) pieces.push('错误: ' + String(errMsg));
-        if (data.url) pieces.push('当前 Webhook: ' + String(data.url));
-        if (data.recommendedUrl && data.recommendedUrl !== data.url) {
-          pieces.push('推荐 Webhook: ' + String(data.recommendedUrl));
-        }
-        if (!pieces.length) pieces.push('可以在 GitHub Actions 日志或 Cloudflare 日志中查看详情。');
-        els.telegramStatusExtra.textContent = pieces.join(' ｜ ');
+      if (data.lastErrorMessage) parts.push(`错误: ${data.lastErrorMessage}`);
+      if (data.error) parts.push(`API错误: ${data.error}`);
+      if (data.recommendedUrl && data.recommendedUrl !== data.url) {
+         parts.push(`建议 URL: ${data.recommendedUrl}`);
+      }
+      if (els.tgExtra) {
+        els.tgExtra.className = 'telegram-info-value status-error';
       }
     }
+    
+    if (els.tgExtra) els.tgExtra.textContent = parts.length > 0 ? parts.join(' | ') : '正常';
+    
   } catch (e) {
     setTelegramStatusBadge('error');
-    els.telegramStatusText.textContent = 'Telegram 状态检查失败。';
-    if (els.telegramStatusExtra) {
-      els.telegramStatusExtra.textContent = String(e && e.message ? e.message : e || '未知错误');
+    if (els.telegramStatusLoading) els.telegramStatusLoading.style.display = 'none';
+    if (els.telegramStatusContent) {
+      els.telegramStatusContent.style.display = 'grid';
+      // Clear fields
+      [els.tgBotName, els.tgBotId, els.tgBotUsername, els.tgChatId, els.tgToken, els.tgWebhook].forEach(el => {
+        if (el) el.textContent = '-';
+      });
+      if (els.tgExtra) {
+        els.tgExtra.className = 'telegram-info-value status-error';
+        els.tgExtra.textContent = String(e && e.message ? e.message : e || '加载失败');
+      }
     }
   }
 }

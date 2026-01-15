@@ -166,25 +166,42 @@ export async function handleApiRequest(request, db, mailDomains, options = { res
         return Response.json({ enabled: false, reason: 'TELEGRAM_BOT_TOKEN 未配置' });
       }
       const apiUrl = `https://api.telegram.org/bot${token}/getWebhookInfo`;
-      let info;
+      const meUrl = `https://api.telegram.org/bot${token}/getMe`;
+      let info, meInfo;
       try {
-        const resp = await fetch(apiUrl);
+        const [resp, meResp] = await Promise.all([
+          fetch(apiUrl),
+          fetch(meUrl)
+        ]);
+        
         if (!resp.ok) {
           const text = await resp.text().catch(() => '');
           logger.error({ logId, action: 'telegram_get_webhook_info', status: resp.status, body: text });
           return Response.json({ enabled: true, ok: false, error: `Telegram API HTTP ${resp.status}`, raw: text });
         }
         info = await resp.json();
+        
+        if (meResp.ok) {
+          meInfo = await meResp.json();
+        }
       } catch (e) {
         logger.error({ logId, action: 'telegram_get_webhook_info', error: e.message, stack: e.stack });
         return Response.json({ enabled: true, ok: false, error: String(e?.message || e) });
       }
       const result = info && info.result ? info.result : {};
+      const me = meInfo && meInfo.result ? meInfo.result : {};
+      
       const currentUrl = result.url || '';
       const origin = new URL(request.url).origin;
       const recommendedUrl = new URL('/telegram/webhook', origin).toString();
       const lastErrorDate = result.last_error_date || null;
       const ok = !!currentUrl && !lastErrorDate;
+      
+      // Mask token
+      const tokenMasked = token.length > 10 ? 
+        token.substring(0, 5) + '...' + token.substring(token.length - 5) : 
+        '******';
+        
       return Response.json({
         enabled: true,
         ok,
@@ -196,7 +213,14 @@ export async function handleApiRequest(request, db, mailDomains, options = { res
         hasCustomCertificate: !!result.has_custom_certificate,
         maxConnections: result.max_connections || null,
         allowedUpdates: result.allowed_updates || null,
-        recommendedUrl
+        recommendedUrl,
+        botInfo: {
+          id: me.id,
+          first_name: me.first_name,
+          username: me.username
+        },
+        tokenMasked,
+        chatId: env.TELEGRAM_CHAT_ID || ''
       });
     } catch (e) {
       logger.error({ logId, action: 'telegram_status', error: e.message, stack: e.stack });

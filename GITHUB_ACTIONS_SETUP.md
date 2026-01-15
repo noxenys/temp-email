@@ -13,6 +13,7 @@
 - **用途**：通过 GitHub Actions 自动部署到 Cloudflare Workers
 - **触发条件**：push 到 main 分支或在 Actions 中手动触发
 - **需要配置**：GitHub Secrets（至少 `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`）
+- **重要提示**：使用此方式时，Worker 的环境变量/Secrets 以 GitHub Secrets 为“单一真源”，每次 Actions 部署都会按工作流脚本把变量写入 Cloudflare。请不要再在 Cloudflare 控制台为同一个 Worker 手动填写同名变量，否则这些手动修改会在下次 Actions 部署时被覆盖而失效。
 
 #### 2. **Cloudflare 控制台一键部署（Deploy with Workers 按钮）**
 - **用途**：在 Cloudflare Dashboard 中通过 "Deploy to Workers" 按钮从 Git 仓库部署

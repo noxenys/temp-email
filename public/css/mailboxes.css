@@ -74,7 +74,7 @@
 }
 
 .mailbox-card .line{ 
-  color: var(--muted); 
+  color: var(--text-light); 
   font-size:13px; 
   white-space: nowrap; 
   overflow: hidden; 
@@ -120,9 +120,9 @@
   word-break: break-all;
   white-space: normal;
 }
-.mailbox-card .pwd{ color:#64748b; }
-.mailbox-card .login{ color:#64748b; }
-.mailbox-card .time{ color:#64748b; }
+.mailbox-card .pwd{ color:#4b5563; }
+.mailbox-card .login{ color:#4b5563; }
+.mailbox-card .time{ color:#4b5563; }
 
 /* 置顶标识 - 右上角显示 */
 .mailbox-card .pin-badge {
@@ -999,7 +999,7 @@
   display: flex;
   gap: 16px;
   font-size: 12px;
-  color: #64748b;
+  color: #4b5563;
   flex-wrap: wrap;
 }
 
@@ -1609,4 +1609,3 @@
     gap: 16px;
   }
 }
-

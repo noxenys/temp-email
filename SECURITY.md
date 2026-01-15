@@ -27,19 +27,11 @@
 
 ## Cloudflare Workers 安全配置
 
-### Wrangler.toml 配置
-```toml
-[env.production]
-# 生产环境配置
-compatibility_flags = ["nodejs_compat"]
-
-[observability.logs]
-enabled = true  # 生产环境可适当减少日志级别
-```
-
-### 环境变量安全
+### Wrangler.toml 配置与环境变量安全
+- 使用 `wrangler.toml` 中的 `env.production` / `env.staging` 区块区分不同环境，只在 Dashboard 或 CI 中注入敏感变量
 - 数据库ID等敏感信息应通过环境变量设置
 - 避免在代码中硬编码敏感信息
+- 当使用 **GitHub Actions 自动部署** 时，应以 GitHub Secrets 作为环境变量的“单一真源”：工作流会在每次部署时把这些值写入 Cloudflare Worker，覆盖同名的控制台配置。因此生产环境下不要同时依赖 Cloudflare 控制台中手动填写的同名变量，以免出现“本地修改但下次部署被还原”的情况。
 
 ## 数据库安全配置
 
@@ -73,12 +65,7 @@ PRAGMA synchronous = NORMAL;
 - 添加速率限制
 
 ### 响应安全头
-```javascript
-// 设置安全响应头
-response.headers.set('X-Content-Type-Options', 'nosniff');
-response.headers.set('X-Frame-Options', 'DENY');
-response.headers.set('X-XSS-Protection', '1; mode=block');
-```
+- 建议在路由层（如 `src/routes.js` 或 `src/server.js` 中包装响应）统一设置 `X-Content-Type-Options`、`X-Frame-Options`、`X-XSS-Protection` 等安全头，当前仓库未内置强制注入逻辑，可按需扩展。
 
 ## 部署安全检查清单
 

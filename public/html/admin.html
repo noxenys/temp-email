@@ -134,9 +134,38 @@
               <span>刷新</span>
             </button>
           </div>
-          <div style="margin-top:8px;font-size:13px;color:#475569;line-height:1.5">
-            <div id="telegram-status-text">正在检查 Telegram Webhook…</div>
-            <div id="telegram-status-extra" style="margin-top:4px;font-size:12px;color:#64748b;"></div>
+          <div style="margin-top:0;">
+            <div id="telegram-status-loading" style="padding:12px;text-align:center;color:#64748b;font-size:13px;">正在检查 Telegram Webhook…</div>
+            <div id="telegram-status-content" class="telegram-info-grid" style="display:none;">
+              <div class="telegram-info-item">
+                <span class="telegram-info-label">Bot Name</span>
+                <span class="telegram-info-value" id="tg-bot-name">-</span>
+              </div>
+              <div class="telegram-info-item">
+                <span class="telegram-info-label">Bot ID</span>
+                <span class="telegram-info-value" id="tg-bot-id">-</span>
+              </div>
+              <div class="telegram-info-item">
+                <span class="telegram-info-label">Username</span>
+                <span class="telegram-info-value" id="tg-bot-username">-</span>
+              </div>
+              <div class="telegram-info-item">
+                <span class="telegram-info-label">Chat ID</span>
+                <span class="telegram-info-value" id="tg-chat-id">-</span>
+              </div>
+              <div class="telegram-info-item full-width">
+                <span class="telegram-info-label">Token (Masked)</span>
+                <span class="telegram-info-value" id="tg-token">-</span>
+              </div>
+              <div class="telegram-info-item full-width">
+                <span class="telegram-info-label">Webhook URL</span>
+                <span class="telegram-info-value" id="tg-webhook">-</span>
+              </div>
+              <div class="telegram-info-item full-width">
+                <span class="telegram-info-label">Status Details</span>
+                <span class="telegram-info-value" id="tg-extra">-</span>
+              </div>
+            </div>
           </div>
         </div>
         <div class="card">
