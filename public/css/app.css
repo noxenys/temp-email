@@ -1227,16 +1227,17 @@ body::before{
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-weight: 600;
-  color: var(--text);
-  margin-bottom: 1px;
+  font-weight: 700;
+  color: #020617;
+  margin-bottom: 2px;
   font-size: 15px;
+  letter-spacing: 0.01em;
 }
 
 .mailbox-item .time{
-  color: var(--text-muted);
-  font-size: 11px;
-  font-weight: 500;
+  color: #475569;
+  font-size: 12px;
+  font-weight: 600;
   opacity: 1;
 }
 
@@ -1512,8 +1513,8 @@ body::before{
   display: flex;
   align-items: center;
   gap: 8px;
-  font-weight: 600;
-  color: var(--text-light);
+  font-weight: 700;
+  color: var(--text);
   font-size: 14px;
 }
 
@@ -1524,6 +1525,8 @@ body::before{
 
 .config-select{
   width: 100%;
+  background: var(--panel);
+  border-color: var(--border);
 }
 
 /* 访客模式禁用下拉时的样式 */
@@ -2000,12 +2003,45 @@ select:disabled{
   align-items: center;
   padding: 24px 32px;
   border-bottom: 1px solid var(--border-light);
-  font-weight: 700;
+  font-weight: 800;
   font-size: 18px;
   background: linear-gradient(135deg, rgba(59,130,246,.14), rgba(139,92,246,.14));
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  color: var(--text);
+  color: #020617;
+}
+
+.modal-header .close {
+  background: rgba(226, 232, 240, 0.8);
+  border: 1px solid rgba(203, 213, 225, 0.8);
+  color: #334155;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  font-size: 20px;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.modal-header .close:hover {
+  background: #ef4444;
+  border-color: #ef4444;
+  color: white;
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+@media (prefers-color-scheme: dark) {
+  .modal-header { color: #f1f5f9; }
+  .field-label { color: #e2e8f0; }
+  .modal-header .close {
+    background: rgba(30, 41, 59, 0.8);
+    border-color: rgba(71, 85, 105, 0.8);
+    color: #cbd5e1;
+  }
 }
 
 .modal-body{
@@ -2028,9 +2064,10 @@ select:disabled{
 }
 
 .field-label{
-  font-weight: 600;
-  color: var(--text);
+  font-weight: 700;
+  color: #020617;
   font-size: 14px;
+  letter-spacing: 0.01em;
 }
 
 .field-input,
