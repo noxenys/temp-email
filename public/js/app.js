@@ -1207,6 +1207,35 @@ window.showEmail = async (id) => {
         doc.open();
         doc.write(rawHtml);
         doc.close();
+        try {
+          const style = doc.createElement('style');
+          const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+          const textColor = isDark ? '#e2e8f0' : '#020617';
+          const bgColor = isDark ? '#020617' : '#f8fafc';
+          const linkColor = isDark ? '#93c5fd' : '#2563eb';
+          const codeBg = isDark ? '#020617' : '#f1f5f9';
+          style.textContent = `
+            body {
+              background: ${bgColor} !important;
+              color: ${textColor} !important;
+            }
+            body, p, span, div, td, th, li, a {
+              color: ${textColor} !important;
+            }
+            a {
+              color: ${linkColor} !important;
+            }
+            pre, code {
+              color: ${textColor} !important;
+              background: ${codeBg} !important;
+            }
+          `;
+          if (doc.head) {
+            doc.head.appendChild(style);
+          } else if (doc.body) {
+            doc.body.insertBefore(style, doc.body.firstChild || null);
+          }
+        } catch (_) {}
         const resize = () => {
           try{
             const h = Math.max(
@@ -1222,8 +1251,11 @@ window.showEmail = async (id) => {
       }
     } else if (rawText.trim()){
       const pre = document.createElement('pre');
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
       pre.style.whiteSpace = 'pre-wrap';
       pre.style.wordBreak = 'break-word';
+      pre.style.color = isDark ? '#e2e8f0' : '#020617';
+      pre.style.background = isDark ? '#020617' : '#f8fafc';
       pre.textContent = rawText;
       host.appendChild(pre);
     } else {

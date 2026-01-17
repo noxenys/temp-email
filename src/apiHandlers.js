@@ -1981,12 +1981,13 @@ export async function handleEmailReceive(requestOrData, db, env) {
 
     const to = String(emailData?.to || '');
     const from = String(emailData?.from || '');
+    const envelopeFrom = String(emailData?.envelope_from || from);
     const subject = String(emailData?.subject || '(无主题)');
     const text = String(emailData?.text || '');
     const html = String(emailData?.html || '');
 
     const mailbox = extractEmail(to);
-    const sender = extractEmail(from);
+    const sender = extractEmail(from || envelopeFrom);
     const blocked = await isSenderBlocked(db, sender);
     if (blocked) {
       return new Response('Blocked', { status: 204 });

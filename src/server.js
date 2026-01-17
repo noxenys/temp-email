@@ -152,9 +152,11 @@ export default {
     
     try {
       const subject = message.headers.get('subject') || '(无主题)';
+      const envelopeFrom = message.from || '';
+      const headerFrom = message.headers.get('from') || envelopeFrom;
       
       logger.info('邮件接收开始', {
-        from: message.from,
+        from: envelopeFrom,
         to: message.to,
         subject: subject.substring(0, 100)
       }, logId);
@@ -178,7 +180,8 @@ export default {
       }
       
       const emailData = {
-        from: message.from,
+        from: headerFrom,
+        envelope_from: envelopeFrom,
         to: message.to,
         subject: subject,
         text,
