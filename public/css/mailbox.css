@@ -15,8 +15,8 @@
   --border-glass: #e4e4e7;
   
   --text: #18181b; /* Zinc-900 */
-  --text-secondary: #52525b; /* Zinc-600 */
-  --text-tertiary: #a1a1aa; /* Zinc-400 */
+  --text-secondary: #52525b; /* Zinc-600 - Dark Gray for readability */
+  --text-tertiary: #71717a; /* Zinc-500 - Medium Gray */
   
   /* Primary Accent - Keep Blue but consistent */
   --primary: #2563eb;
@@ -50,8 +50,8 @@
   --border-glass: #27272a;
   
   --text: #f4f4f5; /* Zinc-100 */
-  --text-secondary: #a1a1aa; /* Zinc-400 */
-  --text-tertiary: #52525b; /* Zinc-600 */
+  --text-secondary: #d4d4d8; /* Zinc-300 - Brighter for Dark Mode */
+  --text-tertiary: #a1a1aa; /* Zinc-400 - Readable Gray */
   
   --primary: #3b82f6; /* Lighter blue for dark mode */
   --primary-light: rgba(59, 130, 246, 0.15);

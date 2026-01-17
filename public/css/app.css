@@ -104,10 +104,10 @@
   --border-glass: #27272a;
   
   --text: #f4f4f5; /* Zinc-100 */
-  --text-light: #a1a1aa; /* Zinc-400 */
-  --text-muted: #71717a; /* Zinc-500 */
-  --muted2: #71717a; /* Zinc-500 */
-  --text-secondary: #52525b; /* Zinc-600 */
+  --text-light: #d4d4d8; /* Zinc-300 - Improved Visibility */
+  --text-muted: #a1a1aa; /* Zinc-400 - Safe Gray */
+  --muted2: #a1a1aa; /* Zinc-400 */
+  --text-secondary: #a1a1aa; /* Zinc-400 */
   
   --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
   --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
