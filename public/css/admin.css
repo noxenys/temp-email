@@ -8,7 +8,7 @@
   align-items: center;
   justify-content: center;
   gap: 6px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.2s ease-out;
   border-color: var(--border);
   color: var(--text);
 }
@@ -40,9 +40,8 @@
   min-height: calc(100vh - 80px);
 }
 
-/* 全局主题设计 */
 .admin-page {
-  background: var(--surface-alt);
+  background: #020617;
   position: relative;
   overflow-x: hidden;
 }
@@ -79,45 +78,23 @@
    卡片设计 - 现代玻璃拟态效果
    =========================================== */
 .admin-page .card {
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-radius: 20px;
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.08),
-    0 4px 16px rgba(0, 0, 0, 0.04),
-    inset 0 1px 0 rgba(255, 255, 255, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  padding: 28px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: var(--shadow-md);
+  border: 1px solid #e5e7eb;
+  padding: 24px;
   position: relative;
   overflow: hidden;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.2s ease-out;
 }
 
 .admin-page .card:hover {
-  transform: translateY(-2px);
-  box-shadow: 
-    0 12px 40px rgba(0, 0, 0, 0.12),
-    0 6px 20px rgba(0, 0, 0, 0.06),
-    inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-lg);
 }
 
-/* 卡片顶部装饰线 */
 .admin-page .card::before {
-	content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, 
-    #3b82f6 0%, 
-    #8b5cf6 25%, 
-    #ec4899 50%, 
-    #10b981 75%, 
-    #f59e0b 100%
-  );
-  border-radius: 20px 20px 0 0;
+	content: none;
 }
 
 /* ===========================================
@@ -143,10 +120,7 @@
 
 .admin-page .card h2 .card-icon {
   font-size: 24px;
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #3b82f6;
 }
 
 /* 操作按钮布局 */
@@ -175,7 +149,7 @@
   font-size: 16px;
   font-weight: 600;
   border-radius: 14px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.2s ease-out;
   position: relative;
   overflow: hidden;
   display: flex;
@@ -185,48 +159,36 @@
 }
 
 .generate-action .btn::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-	width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-  transition: left 0.5s;
-}
-
-.generate-action .btn:hover::before {
-  left: 100%;
+  content: none;
 }
 
 /* 主要按钮样式 */
 .generate-action .btn-primary {
-  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-  box-shadow: 
-    0 4px 16px rgba(59, 130, 246, 0.3),
-    0 2px 8px rgba(59, 130, 246, 0.2);
+  background: #2563eb;
+  border: 1px solid #2563eb;
+  color: #ffffff;
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.25);
 }
 
 .generate-action .btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 
-    0 8px 25px rgba(59, 130, 246, 0.4),
-    0 4px 12px rgba(59, 130, 246, 0.3);
+  transform: translateY(-1px);
+  background: #1d4ed8;
+  border-color: #1d4ed8;
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
 }
 
 /* 次要按钮样式 */
 .generate-action .btn-secondary {
-  background: linear-gradient(135deg, #64748b 0%, #475569 100%);
-  box-shadow: 
-    0 4px 16px rgba(100, 116, 139, 0.2),
-    0 2px 8px rgba(100, 116, 139, 0.15);
+  background: #f9fafb;
+  border: 1px solid #d1d5db;
+  color: #111827;
+  box-shadow: none;
 }
 
 .generate-action .btn-secondary:hover {
-  transform: translateY(-2px);
-  box-shadow: 
-    0 8px 25px rgba(100, 116, 139, 0.3),
-    0 4px 12px rgba(100, 116, 139, 0.2);
+  transform: translateY(-1px);
+  background: #e5e7eb;
+  border-color: #cbd5e1;
 }
 
 /* ===========================================
@@ -265,19 +227,18 @@
   justify-content: space-between;
   align-items: center;
   padding: 12px 16px;
-  background: rgba(255, 255, 255, 0.6);
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
   border-radius: 12px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  backdrop-filter: blur(8px);
+  transition: all 0.2s ease-out;
   position: relative;
 }
 
 .user-mailbox-item:hover {
-  background: rgba(255, 255, 255, 0.9);
-  border-color: rgba(59, 130, 246, 0.3);
-  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.15);
-  transform: translateY(-2px);
+  background: #eff6ff;
+  border-color: #2563eb;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.12);
+  transform: translateY(-1px);
 }
 
 .user-mailbox-item:active {
@@ -287,21 +248,7 @@
 
 /* 点击指示器 */
 .user-mailbox-item::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), rgba(139, 92, 246, 0.05));
-  border-radius: 12px;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
-}
-
-.user-mailbox-item:hover::before {
-  opacity: 1;
+  content: none;
 }
 
 /* 邮箱内容区域 */
@@ -326,7 +273,7 @@
 
 .mailbox-content .time {
   color: var(--text-subtle);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 500;
 }
 
@@ -350,7 +297,7 @@
 }
 
 .telegram-info-label {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--text-subtle);
   font-weight: 600;
   text-transform: uppercase;
@@ -384,7 +331,7 @@
   padding: 0;
   font-size: 14px;
   border-radius: 8px;
-  transition: all 0.2s ease;
+  transition: all 0.2s ease-out;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -397,20 +344,20 @@
 }
 
 .mailbox-actions .btn-ghost:hover {
-  background: rgba(100, 116, 139, 0.2);
-  transform: scale(1.1);
-  color: #334155;
+  background: rgba(100, 116, 139, 0.25);
+  transform: translateY(0);
+  color: #1e293b;
 }
 
 .mailbox-actions .btn-danger {
-  background: linear-gradient(135deg, #ef4444, #dc2626);
-  border: none;
-  color: white;
+  background: #ef4444;
+  border: 1px solid #b91c1c;
+  color: #ffffff;
 }
 
 .mailbox-actions .btn-danger:hover {
-  background: linear-gradient(135deg, #dc2626, #b91c1c);
-  transform: scale(1.1);
+  background: #b91c1c;
+  transform: translateY(0);
 }
 
 /* ===========================================
@@ -453,22 +400,24 @@
 /* 用户数量显示 */
 .users-count {
   font-size: 14px;
-  color: #64748b;
+  color: #111827;
   font-weight: 500;
-  background: rgba(100, 116, 139, 0.1);
+  background: #eff6ff;
   padding: 2px 8px;
   border-radius: 12px;
+  border: 1px solid #dbeafe;
   margin-left: 8px;
 }
 
 /* 邮箱数量显示 */
 .mailboxes-count {
   font-size: 14px;
-  color: #64748b;
+  color: #111827;
   font-weight: 500;
-  background: rgba(100, 116, 139, 0.1);
+  background: #eff6ff;
   padding: 2px 8px;
   border-radius: 12px;
+  border: 1px solid #dbeafe;
   margin-left: 8px;
 }
 
@@ -493,24 +442,21 @@
   border-collapse: separate;
   border-spacing: 0;
   table-layout: fixed;
-  background: rgba(255, 255, 255, 0.6);
-  backdrop-filter: blur(8px);
-  border-radius: 16px;
+  background: #ffffff;
+  border-radius: 12px;
   overflow: hidden;
-  box-shadow: 
-    0 4px 16px rgba(0, 0, 0, 0.06),
-    0 2px 8px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.1);
 }
 
 .table thead th {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(139, 92, 246, 0.08) 100%);
-  color: #1e293b;
-  font-weight: 700;
-  font-size: 13px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  padding: 14px 8px;
-  border-bottom: 2px solid rgba(59, 130, 246, 0.1);
+  background: #f3f4f6;
+  color: #111827;
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: none;
+  letter-spacing: 0.02em;
+  padding: 12px 8px;
+  border-bottom: 1px solid #e5e7eb;
   position: sticky;
   top: 0;
   z-index: 10;
@@ -521,11 +467,11 @@
 
 /* 左侧用户列表表头优化 */
 .admin-left .table thead th {
-  font-size: 14px;
+  font-size: 12px;
   padding: 10px 6px;
   color: #0f172a;
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(139, 92, 246, 0.12) 100%);
-  border-bottom: 2px solid rgba(59, 130, 246, 0.2);
+  background: #e5e7eb;
+  border-bottom: 1px solid #d1d5db;
 }
 
 /* 发件列表头特殊样式 */
@@ -585,11 +531,11 @@
 
 
 .table tbody tr {
-  transition: all 0.2s ease;
+  transition: all 0.2s ease-out;
 }
 
 .table tbody tr:hover {
-  background: rgba(59, 130, 246, 0.04);
+  background: #f9fafb;
 }
 
 
@@ -662,10 +608,10 @@
 .user-actions .btn {
   height: 28px;
   padding: 0 8px;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   border-radius: 5px;
-  transition: all 0.2s ease;
+  transition: all 0.2s ease-out;
   min-width: 42px;
   flex: 1;
   white-space: nowrap;
@@ -699,25 +645,23 @@
 .badge {
   display: inline-flex;
   align-items: center;
-  padding: 2px 6px;
-  border-radius: 6px;
-  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 12px;
   font-weight: 600;
-  background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
-  color: #475569;
-  border: 1px solid rgba(100, 116, 139, 0.15);
+  background: #e5f0ff;
+  color: #1d4ed8;
+  border: none;
 }
 
 /* 用户列表专用样式 */
 .admin-left .table tbody td {
-  font-size: 13px;
+  font-size: 14px;
 }
 
 
 .admin-left .table tbody tr:hover {
-  background: rgba(59, 130, 246, 0.06);
-  transform: translateX(2px);
-  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.1);
+  background: #f3f4f6;
 }
 
 /* 当前选中的用户行高亮 */
@@ -751,8 +695,8 @@
   justify-content: space-between;
   align-items: center;
   padding: 12px 16px;
-  border-top: 1px solid rgba(0, 0, 0, 0.06);
-  background: rgba(255, 255, 255, 0.4);
+  border-top: 1px solid #e5e7eb;
+  background: #f9fafb;
   border-radius: 0 0 12px 12px;
 }
 
@@ -771,7 +715,7 @@
 .pagination-controls .btn {
   height: 28px;
   padding: 0 12px;
-  font-size: 11px;
+  font-size: 12px;
   border-radius: 6px;
 }
 
@@ -841,7 +785,7 @@
   font-weight: 600 !important;
   border-radius: 8px !important;
   padding: 4px 8px !important;
-  font-size: 11px !important;
+  font-size: 12px !important;
   display: block !important;
   text-align: center !important;
   white-space: nowrap !important;
@@ -858,7 +802,7 @@
   color: #3b82f6 !important;
   background: rgba(59, 130, 246, 0.1) !important;
   border: 1px solid rgba(59, 130, 246, 0.2) !important;
-  transition: all 0.2s ease !important;
+  transition: all 0.2s ease-out !important;
 }
 
 .admin-page .admin-left .table tbody td.col-role .role-admin:hover {
@@ -872,7 +816,7 @@
   color: #64748b !important;
   background: rgba(100, 116, 139, 0.1) !important;
   border: 1px solid rgba(100, 116, 139, 0.2) !important;
-  transition: all 0.2s ease !important;
+  transition: all 0.2s ease-out !important;
 }
 
 .admin-page .admin-left .table tbody td.col-role .role-user:hover {
@@ -888,17 +832,14 @@
 .admin-page .select,
 .admin-page textarea {
   width: 100%;
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(8px);
-  border: 1.5px solid rgba(0, 0, 0, 0.08);
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
   border-radius: 12px;
   padding: 14px 16px;
   font-size: 14px;
   color: #1e293b;
-  box-shadow: 
-    0 2px 8px rgba(0, 0, 0, 0.04),
-    inset 0 1px 0 rgba(255, 255, 255, 0.6);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: none;
+  transition: all 0.2s ease-out;
   resize: vertical;
   font-weight: 500;
 }
@@ -913,12 +854,10 @@
 .admin-page .select:focus,
 .admin-page textarea:focus {
   outline: none;
-  border-color: #3b82f6;
-  box-shadow: 
-    0 0 0 4px rgba(59, 130, 246, 0.1),
-    0 4px 16px rgba(59, 130, 246, 0.15);
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25);
   transform: translateY(-1px);
-  background: rgba(255, 255, 255, 0.95);
+  background: #ffffff;
 }
 
 /* 帮助文本 */
@@ -934,29 +873,22 @@
    模态框设计
    =========================================== */
 .admin-page .modal-card {
-	background: rgba(255, 255, 255, 0.95);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 20px;
-  box-shadow: 
-    0 20px 60px rgba(0, 0, 0, 0.15),
-    0 8px 25px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+	background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.16);
   position: relative;
   display: flex;
   flex-direction: column;
-  backdrop-filter: blur(20px);
   overflow: hidden;
 }
 
 .admin-page .modal-header {
-  background: linear-gradient(135deg, 
-    rgba(59, 130, 246, 0.08) 0%, 
-    rgba(139, 92, 246, 0.06) 100%);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-  padding: 24px 28px;
-  border-radius: 20px 20px 0 0;
+  background: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 20px 24px;
+  border-radius: 16px 16px 0 0;
 }
-
 .admin-page .modal-header > div {
   display: flex;
   align-items: center;
@@ -976,14 +908,14 @@
 .admin-page .modal-body {
   flex: 1 1 auto;
   overflow-y: auto;
-  padding: 28px;
+  padding: 24px;
 }
 
 .admin-page .modal-footer {
-  border-top: 1px solid rgba(0, 0, 0, 0.08);
-  padding: 20px 28px;
-  background: rgba(248, 250, 252, 0.8);
-  border-radius: 0 0 20px 20px;
+  border-top: 1px solid #e5e7eb;
+  padding: 16px 24px;
+  background: #f9fafb;
+  border-radius: 0 0 16px 16px;
   display: flex;
   gap: 12px;
   justify-content: flex-end;
@@ -1038,13 +970,13 @@
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  background: rgba(255, 255, 255, 0.8);
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
   padding: 12px 16px;
   border-radius: 12px;
   cursor: pointer;
   user-select: none;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease-out;
   backdrop-filter: blur(8px);
 }
 
@@ -1062,12 +994,12 @@
   border-radius: 6px;
   background: #fff;
   position: relative;
-  transition: all 0.2s ease;
+  transition: all 0.2s ease-out;
 }
 
 .toggle input:checked {
-  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-  border-color: #3b82f6;
+  background: #2563eb;
+  border-color: #2563eb;
 }
 
 .toggle input:checked::after {
@@ -1091,11 +1023,11 @@
   margin-left: 12px;
   padding: 6px 14px;
   border-radius: 20px;
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.08));
-  color: #3b82f6;
+  background: #eff6ff;
+  color: #1d4ed8;
   font-weight: 700;
-  font-size: 13px;
-  border: 1px solid rgba(59, 130, 246, 0.2);
+  font-size: 12px;
+  border: 1px solid #bfdbfe;
 }
 
 /* ===========================================
@@ -1303,7 +1235,7 @@
     color: #3b82f6 !important;
     background: rgba(59, 130, 246, 0.1) !important;
     border: 1px solid rgba(59, 130, 246, 0.2) !important;
-    transition: all 0.2s ease !important;
+    transition: all 0.2s ease-out !important;
   }
 
   .admin-page .admin-left .table tbody td.col-role .role-admin:hover {
@@ -1316,7 +1248,7 @@
     color: #64748b !important;
     background: rgba(100, 116, 139, 0.1) !important;
     border: 1px solid rgba(100, 116, 139, 0.2) !important;
-    transition: all 0.2s ease !important;
+    transition: all 0.2s ease-out !important;
   }
 
   .admin-page .admin-left .table tbody td.col-role .role-user:hover {

@@ -1,52 +1,24 @@
 :root{
-  /* Zinc Theme - Monotone */
-  --surface: #ffffff;
-  --surface-overlay: rgba(255, 255, 255, 0.95);
-  
-  --card: #ffffff;
-  --card-shadow: rgba(0, 0, 0, 0.1);
-  --card-glass: rgba(255, 255, 255, 0.9);
-  
-  --muted: #71717a; /* Zinc-500 */
-  --primary: #2563eb; /* Brand Blue */
+  --surface: #020617;
+  --surface-overlay: rgba(15, 23, 42, 0.96);
+  --card: #020617;
+  --card-shadow: rgba(15, 23, 42, 0.85);
+  --card-glass: rgba(15, 23, 42, 0.9);
+  --muted: #9ca3af;
+  --primary: #2563eb;
   --primary-hover: #1d4ed8;
-  --primary-light: rgba(37, 99, 235, 0.1);
-  
-  --border: #e4e4e7; /* Zinc-200 */
-  --border-light: #f4f4f5; /* Zinc-100 */
-  --border-glass: rgba(0, 0, 0, 0.05);
-  
-  --text: #09090b; /* Zinc-950 */
+  --primary-light: rgba(37, 99, 235, 0.16);
+  --border: #1f2937;
+  --border-light: #111827;
+  --border-glass: rgba(15, 23, 42, 0.9);
+  --text: #e5e7eb;
   --danger: #ef4444;
-  
-  --radius: 12px;
-  --radius-sm: 8px;
-  
-  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  --shadow-glass: 0 4px 30px rgba(0, 0, 0, 0.1);
-  
-  --transition: all 0.2s ease;
-}
-
-/* Dark Mode Support for Login */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --surface: #09090b; /* Zinc-950 */
-    --surface-overlay: rgba(9, 9, 11, 0.95);
-    
-    --card: #18181b; /* Zinc-900 */
-    --card-shadow: rgba(0, 0, 0, 0.3);
-    --card-glass: rgba(24, 24, 27, 0.9);
-    
-    --muted: #a1a1aa; /* Zinc-400 */
-    
-    --border: #27272a; /* Zinc-800 */
-    --border-light: #18181b;
-    --border-glass: rgba(255, 255, 255, 0.05);
-    
-    --text: #fafafa; /* Zinc-50 */
-  }
+  --radius: 16px;
+  --radius-sm: 10px;
+  --shadow: 0 12px 35px rgba(15, 23, 42, 0.8);
+  --shadow-lg: 0 18px 45px rgba(15, 23, 42, 0.85);
+  --shadow-glass: 0 18px 45px rgba(15, 23, 42, 0.9);
+  --transition: all 0.2s ease-out;
 }
 
 * {
@@ -98,6 +70,17 @@ body::before {
   content: none;
 }
 
+.bg {
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(37, 99, 235, 0.25), transparent 55%),
+    radial-gradient(circle at 100% 100%, rgba(15, 23, 42, 0.95), #020617);
+  opacity: 1;
+  pointer-events: none;
+  z-index: 0;
+}
+
 
 .center {
   position: relative;
@@ -112,12 +95,10 @@ body::before {
 .card {
   width: min(90vw, 460px);
   background: var(--card);
-  backdrop-filter: blur(32px);
-  -webkit-backdrop-filter: blur(32px);
   border-radius: var(--radius);
-  padding: 48px 40px;
-  border: 1px solid var(--border-glass);
-  box-shadow: var(--shadow-glass);
+  padding: 40px 32px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-lg);
   text-align: center;
   position: relative;
   overflow: hidden;
@@ -161,10 +142,7 @@ h1 {
   font-size: 28px;
   font-weight: 700;
   margin: 0 0 32px 0;
-  background: linear-gradient(135deg, #06b6d4, #6366f1);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #e5e7eb;
   letter-spacing: -0.02em;
 }
 
@@ -195,23 +173,22 @@ h1 {
 .input {
   width: 100%;
   padding: 16px 20px;
-  border: 1px solid var(--border-glass);
+  border: 1px solid rgba(148, 163, 184, 0.7);
   border-radius: var(--radius-sm);
   margin-bottom: 20px;
-  background: var(--card-glass);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: #e5efff;
   font-size: 16px;
   transition: var(--transition);
   font-weight: 500;
+  color: #020617;
 }
 
 .input:focus {
   outline: none;
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
-  transform: translateY(-2px);
-  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3);
+  transform: translateY(0);
+  background: #e5efff;
 }
 
 .input::placeholder {
@@ -252,8 +229,8 @@ h1 {
 .btn:hover {
   background: var(--primary-hover);
   border-color: var(--primary-hover);
-  transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(6, 182, 212, 0.35);
+  transform: translateY(0);
+  box-shadow: 0 10px 22px rgba(37, 99, 235, 0.45);
 }
 
 .btn:active {

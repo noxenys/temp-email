@@ -1092,11 +1092,11 @@ body::before{
 }
 
 .generate-card{
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), rgba(139, 92, 246, 0.05));
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.06), rgba(15, 23, 42, 0.06));
 }
 
 .inbox-card{
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(6, 182, 212, 0.05));
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.06), rgba(15, 23, 42, 0.06));
 }
 .listcard-header{
   display: grid;
@@ -1264,14 +1264,14 @@ body::before{
   overflow: hidden;
   text-overflow: ellipsis;
   font-weight: 700;
-  color: #020617;
+  color: var(--text);
   margin-bottom: 2px;
   font-size: 15px;
   letter-spacing: 0.01em;
 }
 
 .mailbox-item .time{
-  color: #475569;
+  color: #4b5563;
   font-size: 12px;
   font-weight: 600;
   opacity: 1;
@@ -1332,7 +1332,7 @@ body::before{
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, var(--primary), #8b5cf6, #ec4899);
+  background: linear-gradient(90deg, var(--primary), #1d4ed8);
 }
 
 .card:hover{
@@ -1807,7 +1807,7 @@ select:disabled{
   top: 0;
   bottom: 0;
   width: 4px;
-  background: linear-gradient(180deg, var(--primary), #8b5cf6);
+  background: linear-gradient(180deg, var(--primary), #1d4ed8);
   opacity: 0;
   transition: var(--transition);
 }
@@ -2557,13 +2557,7 @@ select:disabled{
 }
 
 .select option{
-  color: var(--text);
-}
-
-@media (prefers-color-scheme: dark){
-  .select option{
-    color: #e5e7eb;
-  }
+  color: #111827;
 }
 
 .select:focus{
@@ -2877,22 +2871,20 @@ select:disabled{
 }
 
 :root{ 
-  --bg: #f6f7fb; /* 原 #fff → 轻灰，减少刺眼 */ 
-  --panel: #ffffff; /*  卡片底色 */ 
-  --text: #0f172a; /*  slate-900 */ 
-  --text-subtle:#475569; /*  slate-600 */ 
-  --primary:#2563eb; /*  brand */ 
-  --border:#e5e7eb; /*  gray-200 */ 
+  /* 全局背景改为深蓝，不再使用浅灰底色 */
+  --bg: #020617; 
+  --panel: #ffffff; 
+  --text: #0f172a; 
+  --text-subtle:#475569; 
+  --primary:#2563eb; 
+  --border:#e5e7eb; 
   --shadow: 0 10px 30px rgba(2,6,23,.06), 0 2px 6px rgba(2,6,23,.04); 
 } 
 
 @media (prefers-color-scheme: dark){ 
   :root{ 
-    --bg:#0b1220; /*  深色背景 */ 
-    --panel:#0f172a; /*  面板深色 */ 
-    --text:#e5e7eb; /*  字色变亮 */ 
-    --text-subtle:#94a3b8; /*  次级字色 */ 
-    --border:#1f2937; /*  分隔线 */ 
+    /* 深色模式仅强化背景与阴影，保持卡片为白色 + 深色文字 */
+    --bg:#020617; 
     --shadow: 0 8px 24px rgba(0,0,0,.35), 0 1px 4px rgba(0,0,0,.25); 
   } 
 } 
