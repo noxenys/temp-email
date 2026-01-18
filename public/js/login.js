@@ -200,8 +200,6 @@ async function initLoginBanner() {
     if (needDemoBanner) {
       infoBannerTitle.textContent = '当前为官方体验站 / 共享环境，请勿存放或发送敏感信息。';
       infoBannerDesc.textContent = '该环境仅用于体验与演示，数据可能会定期清理。如需长期稳定使用，推荐 Fork 仓库自建部署。';
-      infoBannerLink.style.display = '';
-      infoBannerLink.textContent = '部署文档';
       infoBanner.hidden = false;
       return;
     }
