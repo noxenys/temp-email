@@ -156,13 +156,14 @@ async function initLoginBanner() {
 
     const config = await response.json();
     const modeFromConfig = String(config.siteMode || '').trim().toLowerCase();
-    let siteMode = modeFromConfig || (config.showDemoBanner ? 'demo' : 'selfhost');
+    const siteMode = modeFromConfig === 'demo' ? 'demo' : 'selfhost';
+    const guestEnabled = !!config.guestEnabled || !!config.showGuestBanner;
+    const hasGuestEntry = !!guestBtn;
 
-    if (siteMode !== 'demo' && siteMode !== 'selfhost') {
-      siteMode = 'selfhost';
-    }
+    const needDemoBanner = siteMode === 'demo';
+    const needGuestBanner = !needDemoBanner && guestEnabled && hasGuestEntry;
 
-    if (siteMode === 'demo' || config.showDemoBanner) {
+    if (needDemoBanner) {
       infoBannerTitle.textContent = '当前为官方体验站共享环境，请勿存放或发送敏感信息。';
       infoBannerDesc.textContent = '该环境用于体验与演示，数据可能会定期清理。如需长期稳定使用，推荐 Fork 仓库自建部署。';
       infoBannerLink.style.display = '';
@@ -171,7 +172,7 @@ async function initLoginBanner() {
       return;
     }
 
-    if (config.showGuestBanner) {
+    if (needGuestBanner) {
       infoBannerTitle.textContent = '当前为访客模式（权限受限）。';
       infoBannerDesc.textContent = '您可以使用访客账号体验主要功能，但部分管理与配置能力已关闭。如需完整权限，请使用管理员账号或自建部署。';
       infoBannerLink.style.display = 'none';

@@ -505,13 +505,7 @@ export function createRouter() {
   router.get('/api/config', async(context) => {
     const { env } = context;
     const rawMode = String(env.SITE_MODE || '').trim().toLowerCase();
-    let siteMode = 'selfhost';
-
-    if (rawMode === 'demo' || rawMode === 'selfhost') {
-      siteMode = rawMode;
-    } else if (env.SHOW_DEMO_BANNER === 'true') {
-      siteMode = 'demo';
-    }
+    const siteMode = rawMode === 'demo' ? 'demo' : 'selfhost';
 
     const guestLoginEnabled = !!env.GUEST_PASSWORD;
     const showDemoBanner = siteMode === 'demo';
@@ -520,7 +514,8 @@ export function createRouter() {
     return Response.json({
       siteMode,
       showDemoBanner,
-      showGuestBanner
+      showGuestBanner,
+      guestEnabled: guestLoginEnabled
     });
   });
 

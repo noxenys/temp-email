@@ -299,7 +299,9 @@ npm run deploy
 | `TELEGRAM_BOT_TOKEN` | 可选 | Telegram Bot 的访问令牌 | Cloudflare Worker Secrets |
 | `TELEGRAM_CHAT_ID` | 可选 | 默认接收通知的 Telegram 会话 ID | Cloudflare Worker Variables |
 | `SITE_MODE` | 可选 | 控制登录页提示条模式（`demo` / `selfhost`） | Cloudflare Worker Variables / Secrets |
-| `SHOW_DEMO_BANNER` | 可选 | 兼容旧方案，仅为 `true` 时强制展示 Demo 提示 | Cloudflare Worker Variables / Secrets |
+| `SHOW_DEMO_BANNER` | 废弃 | 旧版演示站提示开关，新版本中不再生效 | Cloudflare Worker Variables / Secrets |
+
+> 提示：如果你通过 **GitHub Actions** 部署本项目，**请不要在 Cloudflare 控制台中添加或编辑任何环境变量**。所有环境变量都应该只配置在 GitHub Secrets / 本地环境中，Actions 部署时会把这些值写入 Worker，并覆盖控制台中原有的同名配置。
 
 > Cloudflare API Token 权限建议：
 > - 在 Cloudflare Dashboard → **My Profile → API Tokens** 中，使用官方模板 **“Edit Cloudflare Workers”** 创建一个新的 Token；
@@ -330,9 +332,8 @@ npm run deploy
   - 可选值：`demo` / `selfhost`，默认视为 `selfhost`
   - 当为 `demo` 时：登录页展示“官方体验站 / 共享环境”提示，并附带部署文档链接
   - 当为 `selfhost` 时：不展示 Demo 提示；若配置了 `GUEST_PASSWORD`，仅展示“访客模式（权限受限）”提示
-- `SHOW_DEMO_BANNER`：旧版兼容开关（可选）
-  - 示例：`SHOW_DEMO_BANNER="true"`
-  - 当 `SITE_MODE` 未显式设置为 `demo/selfhost` 时，且该值为 `true`，视为 Demo 环境并展示演示提示。建议在新部署中优先使用 `SITE_MODE`。
+- `SHOW_DEMO_BANNER`：旧版兼容开关（已废弃，保留向后兼容）
+  - 说明：早期版本用于控制演示站提示条，新版本中登录页提示完全由 `SITE_MODE` 控制，`SHOW_DEMO_BANNER` 不再影响界面显示。新部署请不要再使用该变量，仅旧版本升级场景可暂时保留。
 - `ADMIN_NAME`：严格管理员用户名（默认 `admin`）
   - 示例：`ADMIN_NAME="myadmin"`
   - 用途：管理员登录使用的用户名，对应后台的严格管理员
